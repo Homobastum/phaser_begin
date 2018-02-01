@@ -2,7 +2,7 @@ var Begin;
 (function (Begin) {
     class Jeu extends Phaser.Game {
         constructor() {
-            super(800, 600, Phaser.AUTO, 'zoneDeJeu', null);
+            super(800, 600, Phaser.AUTO, '', null);
             this.state.add('Boot', Begin.Boot, false);
             this.state.add('Preloader', Begin.Preloader, false);
             this.state.add('TitleScreen', Begin.TitleScreen, false);
@@ -17,6 +17,11 @@ var Begin;
 (function (Begin) {
     class Boot extends Phaser.State {
         preload() {
+            this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+            this.game.renderer.renderSession.roundPixels = true;
+            Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
+            this.game.scale.pageAlignHorizontally = true;
+            this.game.scale.pageAlignVertically = true;
         }
         create() {
             this.game.state.start('Preloader', true, false);

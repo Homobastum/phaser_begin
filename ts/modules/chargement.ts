@@ -4,7 +4,19 @@ module Begin
     {
         preload() 
         {
-            
+            /****************************
+             * Configuration du display *
+             ****************************/
+            // Adapter le jeu à l'écran
+            this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+            // Pixel Perfect
+            this.game.renderer.renderSession.roundPixels = true;
+            Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
+
+            // Centrer le jeu à l'écran
+            this.game.scale.pageAlignHorizontally = true;
+            this.game.scale.pageAlignVertically = true;
         }
 
         create() 
