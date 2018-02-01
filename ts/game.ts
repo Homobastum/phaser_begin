@@ -13,13 +13,7 @@ module Begin
             this.state.add('TitleMenu', TitleMenu, false);
             this.state.add('Map1', Map1, false);
 
-            this.state.start('Preloader');
+            this.state.start('Boot');
         }
     }
 }
-
-// Lancement du jeu
-window.onload = () => 
-{
-    new Begin.Jeu();
-};

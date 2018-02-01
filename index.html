@@ -2,11 +2,16 @@
 
 <html lang="fr">
     <head>
+        <!-- Encodage des caractères -->
         <meta charset="utf-8">
-        <title>TypeScript Phaser</title>
         
+        <title>Phaser Begin</title>
+        
+        <!-- Responsive design -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+        
+        <!-- Intégration de Phaser -->
         <link rel="stylesheet" href="css/style.css" type="text/css">
-        
         <script src="lib/phaser.min.js"></script>
     </head>
 
@@ -14,6 +19,14 @@
         <div id="zoneDeJeu"></div>
 
         <!-- Intégration du jeu -->
-        <script src="ts/index.js"></script>
+        <script src="js/game.js"></script>
+
+        <!-- Lancement du jeu -->
+        <script>
+            window.onload = () => 
+            {
+                new Begin.Jeu();
+            };
+        </script>
     </body>
 </html>
