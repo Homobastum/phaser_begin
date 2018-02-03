@@ -27,17 +27,46 @@ module Begin
 
     export class Preloader extends Phaser.State 
     {
+        logo: Phaser.Sprite;
+
         preload() 
         {
-            this.load.image('logo', 'assets/img/logo.png');
+            /*************************
+             * Chargement des assets *
+             *************************/
+            // Chargement des images
+            this.game.load.image('logo', 'assets/img/logo.png');
+            this.game.load.image('title_screen', 'assets/img/title_screen.png');
+            
+            // Chargement des tilesets
+            this.game.load.image('tileset', 'assets/img/tileset.png');
+
+            // Chargement des charsets
+            this.game.load.image('hero', 'assets/img/charset_hero.png');
+            this.game.load.image('enemies', 'assets/img/charset_enemies.png');
+            
+            // Chargement des maps
+            this.game.load.tilemap('map1', 'assets/maps/map1.json', null, Phaser.Tilemap.TILED_JSON);
         }
 
         create() 
         {
-            var logo = this.add.sprite(this.world.centerX, this.world.centerY, 'logo');
-            logo.anchor.setTo(0.5, 0.5);
+            // Afficher le splash screen "HB Lab"
+            this.logo = this.add.sprite(this.world.centerX, this.world.centerY, 'logo');
+            this.logo.anchor.setTo(0.5, 0.5);
+            this.logo.scale.setTo(1, 1);
 
-            // this.game.state.start('TitleScreen', true, false);
+            // Aller à l'écran titre après 3 secondes d'affichage
+            this.game.time.events.add(3000, this.changeState, this, 'TitleScreen');
+        }
+
+        /**
+         * Aller à l'écran de jeu (ou le state) suivant.
+         * @param state Ecran du jeu à démarrer 
+         */
+        changeState(state: string)
+        {
+            this.game.state.start(state, true, false);
         }
     }
 }
