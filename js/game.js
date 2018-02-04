@@ -34,9 +34,10 @@ var Begin;
             this.game.load.image('logo', 'assets/img/logo.png');
             this.game.load.image('title_screen', 'assets/img/title_screen.png');
             this.game.load.image('spring', 'assets/tilesets/spring.png');
-            this.game.load.image('spring', 'assets/tilesets/summer.png');
-            this.game.load.image('spring', 'assets/tilesets/autumn.png');
-            this.game.load.image('spring', 'assets/tilesets/winter.png');
+            this.game.load.image('summer', 'assets/tilesets/summer.png');
+            this.game.load.image('autumn', 'assets/tilesets/autumn.png');
+            this.game.load.image('winter', 'assets/tilesets/winter.png');
+            this.game.load.spritesheet('items', 'assets/tilesets/items.png', 16, 16);
             this.game.load.spritesheet('hero', 'assets/charsets/hero.png', 16, 16);
             this.game.load.spritesheet('enemies', 'assets/charsets/enemies.png', 16, 16);
             this.game.load.tilemap('map1', 'assets/maps/map1.json', null, Phaser.Tilemap.TILED_JSON);
@@ -52,6 +53,26 @@ var Begin;
         }
     }
     Begin.Preloader = Preloader;
+})(Begin || (Begin = {}));
+var Begin;
+(function (Begin) {
+    class Coins extends Phaser.Group {
+        constructor(game, map, hero) {
+            super(game);
+            this.game = game;
+            this.map = map;
+            this.hero = hero;
+            this.game.add.physicsGroup();
+            this.map.createFromObjects('coins', 187, 'items', 17, true, false, this);
+        }
+        update() {
+            this.game.physics.arcade.overlap(this.hero, this, this.collecter);
+        }
+        collecter(hero, coin) {
+            coin.kill();
+        }
+    }
+    Begin.Coins = Coins;
 })(Begin || (Begin = {}));
 var Begin;
 (function (Begin) {
@@ -139,10 +160,22 @@ var Begin;
             this.game.world.setBounds(160, 144, 160, 144);
             this.map.setCollisionBetween(0, 168, true, this.solids);
             this.background.resizeWorld();
+            this.coins = this.game.add.physicsGroup();
+            this.map.createFromObjects('coins', 187, 'items', 17, true, false, this.coins);
+            this.coins.forEach(animateCoin, this);
+            function animateCoin(coin) {
+                coin.body.immovable = true;
+                coin.animations.add('spin', [17, 18, 19, 20], 10, true);
+                coin.animations.play('spin');
+            }
             this.hero = new Begin.Hero(this.game, 72, 80);
         }
         update() {
             this.game.physics.arcade.collide(this.hero, this.solids);
+            this.game.physics.arcade.overlap(this.hero, this.coins, collecter);
+            function collecter(hero, coin) {
+                coin.kill();
+            }
         }
     }
     Begin.Map1 = Map1;

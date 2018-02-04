@@ -46,9 +46,10 @@ module Begin
             
             // Chargement des tilesets
             this.game.load.image('spring', 'assets/tilesets/spring.png');
-            this.game.load.image('spring', 'assets/tilesets/summer.png');
-            this.game.load.image('spring', 'assets/tilesets/autumn.png');
-            this.game.load.image('spring', 'assets/tilesets/winter.png');
+            this.game.load.image('summer', 'assets/tilesets/summer.png');
+            this.game.load.image('autumn', 'assets/tilesets/autumn.png');
+            this.game.load.image('winter', 'assets/tilesets/winter.png');
+            this.game.load.spritesheet('items', 'assets/tilesets/items.png', 16, 16);
 
             // Chargement des charsets
             this.game.load.spritesheet('hero', 'assets/charsets/hero.png', 16, 16);
