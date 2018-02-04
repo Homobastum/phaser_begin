@@ -17,7 +17,7 @@
 263,264,265,266,267,268,269,270,271,272
 </data>
  </layer>
- <layer name="behind" width="10" height="9">
+ <layer name="behind" width="10" height="9" locked="1">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,
@@ -43,8 +43,8 @@
 216,216,216,216,273,245,245,245,245,245
 </data>
  </layer>
- <objectgroup name="events"/>
- <layer name="front" width="10" height="9">
+ <objectgroup name="events" locked="1"/>
+ <layer name="front" width="10" height="9" locked="1">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,

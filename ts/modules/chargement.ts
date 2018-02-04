@@ -17,6 +17,12 @@ module Begin
             // Centrer le jeu à l'écran
             this.game.scale.pageAlignHorizontally = true;
             this.game.scale.pageAlignVertically = true;
+
+            /********************************
+             * Configuration de la physique *
+             ********************************/
+            // Intégration de la gestion de la physique
+            this.game.physics.startSystem(Phaser.Physics.ARCADE);
         }
 
         create() 
@@ -39,11 +45,11 @@ module Begin
             this.game.load.image('title_screen', 'assets/img/title_screen.png');
             
             // Chargement des tilesets
-            this.game.load.image('tileset', 'assets/img/tileset.png');
+            this.game.load.image('general', 'assets/img/tileset.png');
 
             // Chargement des charsets
-            this.game.load.image('hero', 'assets/img/charset_hero.png');
-            this.game.load.image('enemies', 'assets/img/charset_enemies.png');
+            this.game.load.spritesheet('hero', 'assets/img/charset_hero.png', 16, 16);
+            this.game.load.spritesheet('enemies', 'assets/img/charset_enemies.png', 16, 16);
             
             // Chargement des maps
             this.game.load.tilemap('map1', 'assets/maps/map1.json', null, Phaser.Tilemap.TILED_JSON);
@@ -57,7 +63,7 @@ module Begin
             this.logo.scale.setTo(1, 1);
 
             // Aller à l'écran titre après 3 secondes d'affichage
-            this.game.time.events.add(3000, this.changeState, this, 'TitleScreen');
+            this.game.time.events.add(1000, this.changeState, this, 'TitleScreen');
         }
 
         /**
