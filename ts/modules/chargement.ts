@@ -45,11 +45,14 @@ module Begin
             this.game.load.image('title_screen', 'assets/img/title_screen.png');
             
             // Chargement des tilesets
-            this.game.load.image('general', 'assets/img/tileset.png');
+            this.game.load.image('spring', 'assets/tilesets/spring.png');
+            this.game.load.image('spring', 'assets/tilesets/summer.png');
+            this.game.load.image('spring', 'assets/tilesets/autumn.png');
+            this.game.load.image('spring', 'assets/tilesets/winter.png');
 
             // Chargement des charsets
-            this.game.load.spritesheet('hero', 'assets/img/charset_hero.png', 16, 16);
-            this.game.load.spritesheet('enemies', 'assets/img/charset_enemies.png', 16, 16);
+            this.game.load.spritesheet('hero', 'assets/charsets/hero.png', 16, 16);
+            this.game.load.spritesheet('enemies', 'assets/charsets/enemies.png', 16, 16);
             
             // Chargement des maps
             this.game.load.tilemap('map1', 'assets/maps/map1.json', null, Phaser.Tilemap.TILED_JSON);

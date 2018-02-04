@@ -33,9 +33,12 @@ var Begin;
         preload() {
             this.game.load.image('logo', 'assets/img/logo.png');
             this.game.load.image('title_screen', 'assets/img/title_screen.png');
-            this.game.load.image('general', 'assets/img/tileset.png');
-            this.game.load.spritesheet('hero', 'assets/img/charset_hero.png', 16, 16);
-            this.game.load.spritesheet('enemies', 'assets/img/charset_enemies.png', 16, 16);
+            this.game.load.image('spring', 'assets/tilesets/spring.png');
+            this.game.load.image('spring', 'assets/tilesets/summer.png');
+            this.game.load.image('spring', 'assets/tilesets/autumn.png');
+            this.game.load.image('spring', 'assets/tilesets/winter.png');
+            this.game.load.spritesheet('hero', 'assets/charsets/hero.png', 16, 16);
+            this.game.load.spritesheet('enemies', 'assets/charsets/enemies.png', 16, 16);
             this.game.load.tilemap('map1', 'assets/maps/map1.json', null, Phaser.Tilemap.TILED_JSON);
         }
         create() {
@@ -127,16 +130,14 @@ var Begin;
     class Map1 extends Phaser.State {
         create() {
             this.map = this.game.add.tilemap('map1');
-            this.map.addTilesetImage('general', 'general');
+            this.map.addTilesetImage('spring', 'spring');
             this.game.camera.setPosition(160, 144);
             this.background = this.map.createLayer('background');
             this.behind = this.map.createLayer('behind');
             this.solids = this.map.createLayer('solids');
             this.front = this.map.createLayer('front');
             this.game.world.setBounds(160, 144, 160, 144);
-            this.map.setCollisionBetween(214, 216, true, 'solids');
-            this.map.setCollisionBetween(243, 245, true, 'solids');
-            this.map.setCollisionBetween(272, 274, true, 'solids');
+            this.map.setCollisionBetween(0, 168, true, this.solids);
             this.background.resizeWorld();
             this.hero = new Begin.Hero(this.game, 72, 80);
         }

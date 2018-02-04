@@ -17,7 +17,7 @@ module Begin
             // Création de la map
             // /!\ Bien veiller à ce que chaque nom utilisé en paramètre respecte les noms contenus dans le .json /!\
             this.map = this.game.add.tilemap('map1');
-            this.map.addTilesetImage('general', 'general');
+            this.map.addTilesetImage('spring', 'spring');
             
             // Positionner la caméra
             this.game.camera.setPosition(160, 144);
@@ -33,7 +33,8 @@ module Begin
             
             // Ajuster les collisions de la map
             this.game.world.setBounds(160, 144, 160, 144);
-            this.map.setCollision([214, 215, 216, 243, 244, 245, 272, 274], true, 'solids');
+            // this.map.setCollision([39, 40, 41, 52, 53, 54, 65, 67], true, this.solids);
+            this.map.setCollisionBetween(0, 168, true, this.solids);
             
             // Adapter les calques à la map
             this.background.resizeWorld();
