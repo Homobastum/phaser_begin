@@ -31,6 +31,8 @@ var Begin;
     Begin.Boot = Boot;
     class Preloader extends Phaser.State {
         preload() {
+            this.load.audio('coin', 'assets/sounds/coin.mp3', true);
+            this.load.audio('jump', 'assets/sounds/jump.mp3', true);
             this.game.load.image('logo', 'assets/img/logo.png');
             this.game.load.image('title_screen', 'assets/img/title_screen.png');
             this.game.load.image('spring', 'assets/tilesets/spring.png');
@@ -104,9 +106,9 @@ var Begin;
             super(game, x, y, 'hero', 0);
             this.game = game;
             this.game.physics.arcade.enable(this);
+            this.body.gravity.y = 1000;
             this.body.collideWorldBounds = true;
             this.anchor.setTo(0.5, 0.5);
-            this.body.gravity.y = 1000;
             this.game.camera.follow(this);
             for (var noFrame = 1; noFrame <= 7; noFrame++) {
             }
@@ -117,6 +119,7 @@ var Begin;
             this.clavier = this.game.input.keyboard;
             this.tchDirection = this.game.input.keyboard.createCursorKeys();
             this.tchSaut = Phaser.Keyboard.SPACEBAR;
+            this.jumpFx = this.game.add.audio('jump', 1, false);
             this.game.add.existing(this);
         }
         update() {
@@ -138,6 +141,7 @@ var Begin;
                 || this.tchDirection.up.downDuration() && this.body.blocked.down) {
                 this.body.velocity.y = -300;
                 this.animations.play('jump');
+                this.jumpFx.play();
             }
             if (!this.body.blocked.down && this.body.velocity.y > 0) {
                 this.animations.play('fall');
@@ -157,7 +161,7 @@ var Begin;
             this.behind = this.map.createLayer('behind');
             this.solids = this.map.createLayer('solids');
             this.front = this.map.createLayer('front');
-            this.game.world.setBounds(160, 144, 160, 144);
+            this.game.world.setBounds(160, 144, 640, 144);
             this.map.setCollisionBetween(0, 168, true, this.solids);
             this.background.resizeWorld();
             this.coins = this.game.add.physicsGroup();
@@ -168,12 +172,14 @@ var Begin;
                 coin.animations.add('spin', [17, 18, 19, 20], 10, true);
                 coin.animations.play('spin');
             }
+            this.coinFx = this.game.add.audio('coin', 1, false);
             this.hero = new Begin.Hero(this.game, 72, 80);
         }
         update() {
             this.game.physics.arcade.collide(this.hero, this.solids);
-            this.game.physics.arcade.overlap(this.hero, this.coins, collecter);
+            this.game.physics.arcade.overlap(this.hero, this.coins, collecter, null, this);
             function collecter(hero, coin) {
+                this.coinFx.play();
                 coin.kill();
             }
         }

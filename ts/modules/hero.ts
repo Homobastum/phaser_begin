@@ -3,21 +3,27 @@ module Begin
     export class Hero extends Phaser.Sprite
     {
         game: Phaser.Game;
+        jumpFx: Phaser.Sound;
         clavier: any;
         tchDirection: any;
         tchSaut: any;
 
-        // Méthodes
         constructor(game: Phaser.Game, x: number, y: number)
 	    {
             super(game, x, y, 'hero', 0);
             this.game = game;
 
-            // Configuration de la physique du joueur
+            /*****************************************
+             * Configuration de la physique du héros *
+             *****************************************/
+            // Ajout de la physique du héros 
             this.game.physics.arcade.enable(this);
-            this.body.collideWorldBounds = true;
-            this.anchor.setTo(0.5, 0.5);
             this.body.gravity.y = 1000;
+
+            // Empêcher le héros de sortir des limites du terrain de jeu
+            this.body.collideWorldBounds = true;
+            
+            this.anchor.setTo(0.5, 0.5);
             this.game.camera.follow(this);
 
             // Ajuster le masque de collision pour chaque frames du spritesheet de "player"
@@ -26,18 +32,24 @@ module Begin
                 // this.body.setSize(14, 16, 2);
             }
 
+            /************************************
+             * Création des animations du héros *
+             ************************************/
             // Gestion des animations d'action du joueur
             this.animations.add('stand', [0, 1, 2, 3], 5, true);
             this.animations.add('run', [5, 6, 7], 10, true);
             this.animations.add('jump', [8], 10, true);
             this.animations.add('fall', [9], 10, true);
 
-            /************************************
-             * Création des contrôles du joueur *
-             ************************************/
+            /***********************************
+             * Création des contrôles du héros *
+             ***********************************/
             this.clavier = this.game.input.keyboard;
             this.tchDirection = this.game.input.keyboard.createCursorKeys();
             this.tchSaut = Phaser.Keyboard.SPACEBAR;
+
+            // Création des effets sonores du héros
+            this.jumpFx = this.game.add.audio('jump', 1, false);
 
             this.game.add.existing(this);
         }
@@ -77,6 +89,7 @@ module Begin
                 // Sauter
                 this.body.velocity.y = -300;
                 this.animations.play('jump');
+                this.jumpFx.play();
             }
 
             if(!this.body.blocked.down && this.body.velocity.y > 0) 

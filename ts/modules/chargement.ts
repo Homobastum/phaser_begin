@@ -40,6 +40,10 @@ module Begin
             /*************************
              * Chargement des assets *
              *************************/
+            // Chargement des sons
+            this.load.audio('coin', 'assets/sounds/coin.mp3', true);
+            this.load.audio('jump', 'assets/sounds/jump.mp3', true);
+
             // Chargement des images
             this.game.load.image('logo', 'assets/img/logo.png');
             this.game.load.image('title_screen', 'assets/img/title_screen.png');

@@ -4,7 +4,7 @@ module Begin
     {
         hero: Begin.Hero;
         coins: Phaser.Group;
-
+        coinFx: Phaser.Sound;
         map: Phaser.Tilemap;
         background: Phaser.TilemapLayer;
         behind: Phaser.TilemapLayer;
@@ -56,6 +56,8 @@ module Begin
                 coin.animations.play('spin');
             }
 
+            this.coinFx = this.game.add.audio('coin', 1, false);
+
             /**********************
              * Création du joueur *
              **********************/
@@ -70,9 +72,10 @@ module Begin
             // Gestion de la collision entre le joueur et le calque des solides
             this.game.physics.arcade.collide(this.hero, this.solids);
 
-            this.game.physics.arcade.overlap(this.hero, this.coins, collecter);
+            this.game.physics.arcade.overlap(this.hero, this.coins, collecter, null, this);
             function collecter(hero: Begin.Hero, coin: Phaser.Sprite) 
             {
+                this.coinFx.play();
                 coin.kill();
             }
         }
