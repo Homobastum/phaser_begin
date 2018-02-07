@@ -1,15 +1,9 @@
 var Begin;
 (function (Begin) {
-<<<<<<< HEAD
-    class Jeu extends Phaser.Game {
-        constructor() {
-            super(800, 600, Phaser.AUTO, '', null);
-=======
     Begin.score = 0;
     class Jeu extends Phaser.Game {
         constructor() {
             super(160, 144, Phaser.AUTO, '', null);
->>>>>>> collectables
             this.state.add('Boot', Begin.Boot, false);
             this.state.add('Preloader', Begin.Preloader, false);
             this.state.add('TitleScreen', Begin.TitleScreen, false);
@@ -29,10 +23,7 @@ var Begin;
             Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
             this.game.scale.pageAlignHorizontally = true;
             this.game.scale.pageAlignVertically = true;
-<<<<<<< HEAD
-=======
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
->>>>>>> collectables
         }
         create() {
             this.game.state.start('Preloader', true, false);
@@ -41,13 +32,6 @@ var Begin;
     Begin.Boot = Boot;
     class Preloader extends Phaser.State {
         preload() {
-<<<<<<< HEAD
-            this.load.image('logo', 'assets/img/logo.png');
-        }
-        create() {
-            var logo = this.add.sprite(this.world.centerX, this.world.centerY, 'logo');
-            logo.anchor.setTo(0.5, 0.5);
-=======
             this.load.audio('coin', 'assets/sounds/coin.mp3', true);
             this.load.audio('jump', 'assets/sounds/jump.mp3', true);
             this.game.load.image('logo', 'assets/img/logo.png');
@@ -69,19 +53,12 @@ var Begin;
         }
         changeState(state) {
             this.game.state.start(state, true, false);
->>>>>>> collectables
         }
     }
     Begin.Preloader = Preloader;
 })(Begin || (Begin = {}));
 var Begin;
 (function (Begin) {
-<<<<<<< HEAD
-    class TitleScreen extends Phaser.State {
-        preload() {
-        }
-        create() {
-=======
     class Coins extends Phaser.Group {
         constructor(game, map, hero) {
             super(game);
@@ -117,33 +94,19 @@ var Begin;
         }
         changeState(state) {
             this.game.state.start(state, true, false);
->>>>>>> collectables
         }
     }
     Begin.TitleScreen = TitleScreen;
     class TitleMenu extends Phaser.State {
-<<<<<<< HEAD
-        preload() {
-        }
-        create() {
-        }
-=======
         create() {
         }
         update() {
         }
->>>>>>> collectables
     }
     Begin.TitleMenu = TitleMenu;
 })(Begin || (Begin = {}));
 var Begin;
 (function (Begin) {
-<<<<<<< HEAD
-    class Map1 {
-        preload() {
-        }
-        create() {
-=======
     class Hero extends Phaser.Sprite {
         constructor(game, x, y) {
             super(game, x, y, 'hero', 0);
@@ -242,7 +205,6 @@ var Begin;
                 this.hud.augmenterScore();
                 coin.kill();
             }
->>>>>>> collectables
         }
     }
     Begin.Map1 = Map1;

@@ -17,15 +17,12 @@ module Begin
             // Centrer le jeu à l'écran
             this.game.scale.pageAlignHorizontally = true;
             this.game.scale.pageAlignVertically = true;
-<<<<<<< HEAD
-=======
 
             /********************************
              * Configuration de la physique *
              ********************************/
             // Intégration de la gestion de la physique
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
->>>>>>> collectables
         }
 
         create() 
@@ -36,11 +33,6 @@ module Begin
 
     export class Preloader extends Phaser.State 
     {
-<<<<<<< HEAD
-        preload() 
-        {
-            this.load.image('logo', 'assets/img/logo.png');
-=======
         logo: Phaser.Sprite;
 
         preload() 
@@ -69,17 +61,10 @@ module Begin
             
             // Chargement des maps
             this.game.load.tilemap('map1', 'assets/maps/map1.json', null, Phaser.Tilemap.TILED_JSON);
->>>>>>> collectables
         }
 
         create() 
         {
-<<<<<<< HEAD
-            var logo = this.add.sprite(this.world.centerX, this.world.centerY, 'logo');
-            logo.anchor.setTo(0.5, 0.5);
-
-            // this.game.state.start('TitleScreen', true, false);
-=======
             // Afficher le splash screen "HB Lab"
             this.logo = this.add.sprite(this.world.centerX, this.world.centerY, 'logo');
             this.logo.anchor.setTo(0.5, 0.5);
@@ -96,7 +81,6 @@ module Begin
         changeState(state: string)
         {
             this.game.state.start(state, true, false);
->>>>>>> collectables
         }
     }
 }

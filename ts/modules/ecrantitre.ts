@@ -2,17 +2,6 @@ module Begin
 {
     export class TitleScreen extends Phaser.State 
     {
-<<<<<<< HEAD
-        preload() 
-        {
-
-        }
-
-        create() 
-        {
-
-        }
-=======
         titleScreen: Phaser.Sprite;
 
         create() 
@@ -36,18 +25,10 @@ module Begin
         {
             this.game.state.start(state, true, false);
         }
->>>>>>> collectables
     }
 
     export class TitleMenu extends Phaser.State 
     {
-<<<<<<< HEAD
-        preload() {
-
-        }
-
-        create() {
-=======
         create() 
         {
 
@@ -55,7 +36,6 @@ module Begin
 
         update()
         {
->>>>>>> collectables
 
         }
     }

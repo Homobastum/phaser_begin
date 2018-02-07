@@ -1,17 +1,5 @@
 module Begin
 {
-<<<<<<< HEAD
-    export class Map1 
-    {
-        preload() 
-        {
-
-        }
-
-        create() 
-        {
-            
-=======
     export class Map1 extends Phaser.State
     {
         hero: Begin.Hero;
@@ -96,7 +84,6 @@ module Begin
                 this.hud.augmenterScore();
                 coin.kill();
             }
->>>>>>> collectables
         }
     }
 }
