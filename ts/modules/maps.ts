@@ -3,6 +3,8 @@ module Begin
     export class Map1 extends Phaser.State
     {
         hero: Begin.Hero;
+        hud: Begin.HUD;
+
         coins: Phaser.Group;
         coinFx: Phaser.Sound;
         map: Phaser.Tilemap;
@@ -58,6 +60,9 @@ module Begin
 
             this.coinFx = this.game.add.audio('coin', 1, false);
 
+            // Création du HUD
+            this.hud = new HUD(this.game);
+
             /**********************
              * Création du joueur *
              **********************/
@@ -76,6 +81,7 @@ module Begin
             function collecter(hero: Begin.Hero, coin: Phaser.Sprite) 
             {
                 this.coinFx.play();
+                this.hud.augmenterScore();
                 coin.kill();
             }
         }

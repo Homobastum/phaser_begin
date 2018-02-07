@@ -1,5 +1,6 @@
 var Begin;
 (function (Begin) {
+    Begin.score = 0;
     class Jeu extends Phaser.Game {
         constructor() {
             super(160, 144, Phaser.AUTO, '', null);
@@ -66,6 +67,11 @@ var Begin;
             this.hero = hero;
             this.game.add.physicsGroup();
             this.map.createFromObjects('coins', 187, 'items', 17, true, false, this);
+            this.forEach(function (coin) {
+                coin.body.immovable = true;
+                coin.animations.add('spin', [17, 18, 19, 20], 10, true);
+                coin.animations.play('spin');
+            }, this);
         }
         update() {
             this.game.physics.arcade.overlap(this.hero, this, this.collecter);
@@ -152,6 +158,21 @@ var Begin;
 })(Begin || (Begin = {}));
 var Begin;
 (function (Begin) {
+    class HUD extends Phaser.Group {
+        constructor(game) {
+            super(game);
+            this.fixedToCamera = true;
+            this.scoreText = game.add.text(4, 4, 'Coins: 0', { font: '10pt Revalia' }, this);
+        }
+        augmenterScore() {
+            Begin.score += 1;
+            this.scoreText.setText('Coins: ' + Begin.score);
+        }
+    }
+    Begin.HUD = HUD;
+})(Begin || (Begin = {}));
+var Begin;
+(function (Begin) {
     class Map1 extends Phaser.State {
         create() {
             this.map = this.game.add.tilemap('map1');
@@ -173,6 +194,7 @@ var Begin;
                 coin.animations.play('spin');
             }
             this.coinFx = this.game.add.audio('coin', 1, false);
+            this.hud = new Begin.HUD(this.game);
             this.hero = new Begin.Hero(this.game, 72, 80);
         }
         update() {
@@ -180,6 +202,7 @@ var Begin;
             this.game.physics.arcade.overlap(this.hero, this.coins, collecter, null, this);
             function collecter(hero, coin) {
                 this.coinFx.play();
+                this.hud.augmenterScore();
                 coin.kill();
             }
         }
