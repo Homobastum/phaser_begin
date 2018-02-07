@@ -1,6 +1,17 @@
+<<<<<<< HEAD
 // Paramètres généraux du jeu
 module Begin
 {
+=======
+// Configuration générale du jeu
+module Begin
+{
+    // Déclaration et initialisation des variables globales du jeu
+    export let score: number;
+    score = 0;
+    
+    // Paramètres du jeu
+>>>>>>> collectables
     export class Jeu extends Phaser.Game 
     {
         constructor() 
@@ -8,7 +19,11 @@ module Begin
             /**********************
              * Création du canvas *
              **********************/
+<<<<<<< HEAD
              super(800, 600, Phaser.AUTO, '', null);
+=======
+             super(160, 144, Phaser.AUTO, '', null);
+>>>>>>> collectables
 
             /*****************************************
              * Gestion des écrans (ou states) du jeu *
