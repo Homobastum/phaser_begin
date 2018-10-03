@@ -1,3 +1,5 @@
 .vscode/*
 assets/wip/*
 assets/wip/maps/*
+js/*.map
+serv.bat
