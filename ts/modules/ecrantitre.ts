@@ -1,11 +1,8 @@
-module Begin
-{
-    export class TitleScreen extends Phaser.State 
-    {
+module Begin {
+    export class TitleScreen extends Phaser.State {
         titleScreen: Phaser.Sprite;
 
-        create() 
-        {
+        create () {
             /******************************
              * Affichage de l'écran titre *
              ******************************/
@@ -16,26 +13,21 @@ module Begin
             this.game.time.events.add(1000, this.changeState, this, 'Map1');
         }
 
-        update()
-        {
+        update () {
 
         }
 
-        changeState(state: string) 
-        {
+        changeState (state: string) {
             this.game.state.start(state, true, false);
         }
     }
 
-    export class TitleMenu extends Phaser.State 
-    {
-        create() 
-        {
+    export class TitleMenu extends Phaser.State {
+        create () {
 
         }
 
-        update()
-        {
+        update () {
 
         }
     }

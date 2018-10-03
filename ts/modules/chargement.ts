@@ -1,9 +1,6 @@
-module Begin 
-{
-    export class Boot extends Phaser.State 
-    {
-        preload() 
-        {
+module Begin {
+    export class Boot extends Phaser.State {
+        preload () {
             /****************************
              * Configuration du display *
              ****************************/
@@ -25,18 +22,15 @@ module Begin
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
         }
 
-        create() 
-        {
+        create () {
             this.game.state.start('Preloader', true, false);
         }
     }
 
-    export class Preloader extends Phaser.State 
-    {
+    export class Preloader extends Phaser.State {
         logo: Phaser.Sprite;
 
-        preload() 
-        {
+        preload () {
             /*************************
              * Chargement des assets *
              *************************/
@@ -63,8 +57,7 @@ module Begin
             this.game.load.tilemap('map1', 'assets/maps/map1.json', null, Phaser.Tilemap.TILED_JSON);
         }
 
-        create() 
-        {
+        create () {
             // Afficher le splash screen "HB Lab"
             this.logo = this.add.sprite(this.world.centerX, this.world.centerY, 'logo');
             this.logo.anchor.setTo(0.5, 0.5);
@@ -78,8 +71,7 @@ module Begin
          * Aller à l'écran de jeu (ou le state) suivant.
          * @param state Ecran du jeu à démarrer 
          */
-        changeState(state: string)
-        {
+        changeState (state: string) {
             this.game.state.start(state, true, false);
         }
     }

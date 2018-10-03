@@ -1,15 +1,12 @@
-module Begin
-{
-    export class Hero extends Phaser.Sprite
-    {
+module Begin {
+    export class Hero extends Phaser.Sprite {
         game: Phaser.Game;
         jumpFx: Phaser.Sound;
         clavier: any;
         tchDirection: any;
         tchSaut: any;
 
-        constructor(game: Phaser.Game, x: number, y: number)
-	    {
+        constructor (game: Phaser.Game, x: number, y: number) {
             super(game, x, y, 'hero', 0);
             this.game = game;
 
@@ -27,8 +24,7 @@ module Begin
             this.game.camera.follow(this);
 
             // Ajuster le masque de collision pour chaque frames du spritesheet de "player"
-            for (var noFrame = 1; noFrame <= 7; noFrame++) 
-            {
+            for (var noFrame = 1; noFrame <= 7; noFrame++) {
                 // this.body.setSize(14, 16, 2);
             }
 
@@ -54,8 +50,7 @@ module Begin
             this.game.add.existing(this);
         }
 
-        update() 
-        {
+        update () {
             /***********************************
 	         * Gestion des contrôles du joueur *
 	         ***********************************/
@@ -63,37 +58,31 @@ module Begin
             this.body.velocity.x = 0;
 
             // Direction
-            if(this.tchDirection.left.isDown) 
-            {
+            if (this.tchDirection.left.isDown) {
                 // Aller à gauche
                 this.body.velocity.x = -100;
                 this.scale.x = -1; // Pour tourner le sprite vers la gauche
                 this.body.blocked.down ? this.animations.play('run') : false;
             }
-            else if(this.tchDirection.right.isDown) 
-            {
+            else if (this.tchDirection.right.isDown) {
                 // Aller à droite
                 this.body.velocity.x = 100;
                 this.scale.x = 1; // Pour tourner le sprite vers la droite
                 this.body.blocked.down ? this.animations.play('run') : false;
-            }
-            else 
-            {
+            } else {
                 // Rester debout (avec respiration)
                 this.body.blocked.down ? this.animations.play('stand') : false;
             }
 
-            if(this.game.input.keyboard.downDuration(this.tchSaut) && this.body.blocked.down
-            || this.tchDirection.up.downDuration() && this.body.blocked.down) 
-            {
+            if (this.game.input.keyboard.downDuration(this.tchSaut) && this.body.blocked.down
+            || this.tchDirection.up.downDuration() && this.body.blocked.down) {
                 // Sauter
                 this.body.velocity.y = -300;
                 this.animations.play('jump');
                 this.jumpFx.play();
             }
 
-            if(!this.body.blocked.down && this.body.velocity.y > 0) 
-            {
+            if (!this.body.blocked.down && this.body.velocity.y > 0) {
                 // Chuter
                 this.animations.play('fall');
             }

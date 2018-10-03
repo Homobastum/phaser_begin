@@ -1,7 +1,5 @@
-module Begin
-{
-    export class Map1 extends Phaser.State
-    {
+module Begin {
+    export class Map1 extends Phaser.State {
         hero: Begin.Hero;
         hud: Begin.HUD;
 
@@ -13,8 +11,7 @@ module Begin
         solids: Phaser.TilemapLayer;
         front: Phaser.TilemapLayer;
 
-        create() 
-        {
+        create () {
             /*******************************
              * Affichage du terrain de jeu *
              *******************************/
@@ -51,8 +48,7 @@ module Begin
 
             this.coins.forEach(animateCoin, this);
             
-            function animateCoin(coin: Phaser.Sprite)
-            {
+            function animateCoin (coin: Phaser.Sprite) {
                 coin.body.immovable = true;
                 coin.animations.add('spin', [17, 18, 19, 20], 10, true);
                 coin.animations.play('spin');
@@ -69,8 +65,7 @@ module Begin
             this.hero = new Hero(this.game, 72, 80);
         }
 
-        update()
-        {
+        update () {
             /**************************
              * Gestion des collisions *
              **************************/
@@ -78,8 +73,7 @@ module Begin
             this.game.physics.arcade.collide(this.hero, this.solids);
 
             this.game.physics.arcade.overlap(this.hero, this.coins, collecter, null, this);
-            function collecter(hero: Begin.Hero, coin: Phaser.Sprite) 
-            {
+            function collecter (hero: Begin.Hero, coin: Phaser.Sprite) {
                 this.coinFx.play();
                 this.hud.augmenterScore();
                 coin.kill();

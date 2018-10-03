@@ -1,11 +1,8 @@
-module Begin
-{
-    export class HUD extends Phaser.Group
-    {
+module Begin {
+    export class HUD extends Phaser.Group {
         scoreText: Phaser.Text;
 
-        constructor(game: Phaser.Game)
-        {
+        constructor (game: Phaser.Game) {
             super(game);
 
             this.fixedToCamera = true;
@@ -13,8 +10,7 @@ module Begin
             this.scoreText = game.add.text(4, 4, 'Coins: 0', {font:'10pt Revalia'}, this);
         }
 
-        augmenterScore()
-        {
+        augmenterScore () {
             Begin.score += 1;
             this.scoreText.setText('Coins: ' + Begin.score);
         }
