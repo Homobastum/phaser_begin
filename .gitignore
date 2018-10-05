@@ -1,5 +1,17 @@
+# Commenter / Décommenter en fonction de la branche à pusher
+
+# Master (nothing)
+
+# GitHub
 .vscode/*
 assets/wip/*
 assets/wip/maps/*
 js/*.map
 serv.bat
+
+# Prod
+# ts/*
+# ts/modules/*
+# LICENSE
+# README.md
+# tsconfig.json
