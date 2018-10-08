@@ -3,12 +3,12 @@
 # Master (nothing)
 
 # GitHub
-.sonarlint/*
-.vscode/*
-assets/wip/*
-assets/wip/maps/*
-js/*.map
-serv.bat
+# .sonarlint/*
+# .vscode/*
+# assets/wip/*
+# assets/wip/maps/*
+# js/*.map
+# serv.bat
 
 # Prod
 # ts/*
