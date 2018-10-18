@@ -173,22 +173,18 @@ var Begin;
                 if (Hero.lvlDesign[level_key]['name'] == nomLvl) {
                     let level = Hero.lvlDesign[level_key];
                     if (this.body.x < level.limit_x_neg.axis) {
-                        console.log('left');
                         let level_limit = level.limit_x_neg;
                         this.consequences(level_limit);
                     }
                     if (this.body.x > level.limit_x_pos.axis) {
-                        console.log('right');
                         let level_limit = level.limit_x_pos;
                         this.consequences(level_limit);
                     }
                     if (this.body.y < level.limit_y_neg.axis) {
-                        console.log('up');
                         let level_limit = level.limit_y_neg;
                         this.consequences(level_limit);
                     }
                     if (this.body.y > level.limit_y_pos.axis) {
-                        console.log('down');
                         let level_limit = level.limit_y_pos;
                         this.consequences(level_limit);
                     }
@@ -214,9 +210,6 @@ var Begin;
             }
             Hero.x = coordonnees[0];
             Hero.y = coordonnees[1];
-            console.log(coordonnees);
-            console.log(nomLvl);
-            console.log('x: ' + Hero.x + ' y: ' + Hero.y);
         }
         setCollisionWithLevelLimits() {
             for (let level_key in Hero.lvlDesign) {
