@@ -21,6 +21,7 @@ module Begin {
             this.state.add('TitleScreen', TitleScreen, false);
             this.state.add('TitleMenu', TitleMenu, false);
             this.state.add('Map1', Map1, false);
+            this.state.add('Map2', Map2, false);
 
             // Lancement du premier écran
             this.state.start('Boot');

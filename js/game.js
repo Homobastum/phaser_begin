@@ -9,6 +9,7 @@ var Begin;
             this.state.add('TitleScreen', Begin.TitleScreen, false);
             this.state.add('TitleMenu', Begin.TitleMenu, false);
             this.state.add('Map1', Begin.Map1, false);
+            this.state.add('Map2', Begin.Map2, false);
             this.state.start('Boot');
         }
     }
@@ -43,7 +44,9 @@ var Begin;
             this.game.load.spritesheet('items', 'assets/tilesets/items.png', 16, 16);
             this.game.load.spritesheet('hero', 'assets/charsets/hero.png', 16, 16);
             this.game.load.spritesheet('enemies', 'assets/charsets/enemies.png', 16, 16);
+            this.game.load.json('lvldesign', 'assetS/maps/lvldesign.json');
             this.game.load.tilemap('map1', 'assets/maps/map1.json', null, Phaser.Tilemap.TILED_JSON);
+            this.game.load.tilemap('map2', 'assets/maps/map2.json', null, Phaser.Tilemap.TILED_JSON);
         }
         create() {
             this.logo = this.add.sprite(this.world.centerX, this.world.centerY, 'logo');
@@ -93,7 +96,7 @@ var Begin;
         create() {
             this.titleScreen = this.add.sprite(this.world.centerX, this.world.centerY, 'title_screen');
             this.titleScreen.anchor.setTo(0.5, 0.5);
-            this.game.time.events.add(1000, this.changeState, this, 'Map1');
+            this.game.time.events.add(1000, this.changeState, this, 'Map2');
         }
         update() {
         }
@@ -113,12 +116,18 @@ var Begin;
 var Begin;
 (function (Begin) {
     class Hero extends Phaser.Sprite {
-        constructor(game, x, y) {
-            super(game, x, y, 'hero', 0);
+        constructor(game) {
+            if (Hero.x == null || Hero.y == null) {
+                let origine = Hero.getOrigineLvl(Hero.nomLvl);
+                Hero.x = origine[0];
+                Hero.y = origine[1];
+            }
+            super(game, Hero.x, Hero.y, 'hero', 0);
             this.game = game;
             this.game.physics.arcade.enable(this);
             this.body.gravity.y = 1000;
             this.body.collideWorldBounds = true;
+            this.setCollisionWithLevelLimits();
             this.anchor.setTo(0.5, 0.5);
             this.game.camera.follow(this);
             for (var noFrame = 1; noFrame <= 7; noFrame++) {
@@ -157,6 +166,90 @@ var Begin;
             if (!this.body.blocked.down && this.body.velocity.y > 0) {
                 this.animations.play('fall');
             }
+            this.sortDeLaMap(Hero.nomLvl);
+        }
+        sortDeLaMap(nomLvl) {
+            for (let level_key in Hero.lvlDesign) {
+                if (Hero.lvlDesign[level_key]['name'] == nomLvl) {
+                    let level = Hero.lvlDesign[level_key];
+                    if (this.body.x < level.limit_x_neg.axis) {
+                        console.log('left');
+                        let level_limit = level.limit_x_neg;
+                        this.consequences(level_limit);
+                    }
+                    if (this.body.x > level.limit_x_pos.axis) {
+                        console.log('right');
+                        let level_limit = level.limit_x_pos;
+                        this.consequences(level_limit);
+                    }
+                    if (this.body.y < level.limit_y_neg.axis) {
+                        console.log('up');
+                        let level_limit = level.limit_y_neg;
+                        this.consequences(level_limit);
+                    }
+                    if (this.body.y > level.limit_y_pos.axis) {
+                        console.log('down');
+                        let level_limit = level.limit_y_pos;
+                        this.consequences(level_limit);
+                    }
+                }
+            }
+        }
+        consequences(limit_level) {
+            if (limit_level.dead) {
+                this.meurt();
+            }
+            if (limit_level.map) {
+                let coordonnees = [limit_level.player_x, limit_level.player_y];
+                this.seTeleporte(limit_level.map, coordonnees);
+            }
+        }
+        meurt() {
+            this.seTeleporte(Hero.nomLvl);
+        }
+        seTeleporte(nomLvl, coordonnees = null) {
+            this.game.state.start(nomLvl);
+            if (coordonnees == null) {
+                coordonnees = Hero.getOrigineLvl(nomLvl);
+            }
+            Hero.x = coordonnees[0];
+            Hero.y = coordonnees[1];
+            console.log(coordonnees);
+            console.log(nomLvl);
+            console.log('x: ' + Hero.x + ' y: ' + Hero.y);
+        }
+        setCollisionWithLevelLimits() {
+            for (let level_key in Hero.lvlDesign) {
+                if (Hero.lvlDesign[level_key]['name'] == Hero.nomLvl) {
+                    let level = Hero.lvlDesign[level_key];
+                    for (let limit_key in level) {
+                        switch (limit_key) {
+                            case 'limit_y_neg':
+                                this.game.physics.arcade.checkCollision.up = level[limit_key].collide;
+                                break;
+                            case 'limit_x_pos':
+                                this.game.physics.arcade.checkCollision.right = level[limit_key].collide;
+                                break;
+                            case 'limit_y_pos':
+                                this.game.physics.arcade.checkCollision.down = level[limit_key].collide;
+                                break;
+                            case 'limit_x_neg':
+                                this.game.physics.arcade.checkCollision.left = level[limit_key].collide;
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+        static getOrigineLvl(nomLvl) {
+            let origine;
+            for (let level_key in Hero.lvlDesign) {
+                if (Hero.lvlDesign[level_key]['name'] == nomLvl) {
+                    let level = Hero.lvlDesign[level_key];
+                    origine = [level['origin_player_x'], level['origin_player_y']];
+                }
+            }
+            return origine;
         }
     }
     Begin.Hero = Hero;
@@ -189,7 +282,9 @@ var Begin;
             this.game.world.setBounds(160, 144, 640, 144);
             this.map.setCollisionBetween(0, 168, true, this.solids);
             this.background.resizeWorld();
-            this.hero = new Begin.Hero(this.game, 72, 80);
+            Begin.Hero.lvlDesign = this.game.cache.getJSON('lvldesign');
+            Begin.Hero.nomLvl = 'Map1';
+            this.hero = new Begin.Hero(this.game);
             this.front = this.map.createLayer('front');
             this.hud = new Begin.HUD(this.game);
             this.coins = new Begin.Coins(this.game, this.map, this.hud, this.hero);
@@ -199,5 +294,28 @@ var Begin;
         }
     }
     Begin.Map1 = Map1;
+    class Map2 extends Phaser.State {
+        create() {
+            this.map = this.game.add.tilemap('map2');
+            this.map.addTilesetImage('spring', 'spring');
+            this.game.camera.setPosition(160, 144);
+            this.background = this.map.createLayer('background');
+            this.behind = this.map.createLayer('behind');
+            this.solids = this.map.createLayer('solids');
+            this.game.world.setBounds(160, 144, 160, 144);
+            this.map.setCollisionBetween(0, 168, true, this.solids);
+            this.background.resizeWorld();
+            Begin.Hero.lvlDesign = this.game.cache.getJSON('lvldesign');
+            Begin.Hero.nomLvl = 'Map2';
+            this.hero = new Begin.Hero(this.game);
+            this.front = this.map.createLayer('front');
+            this.hud = new Begin.HUD(this.game);
+            this.coins = new Begin.Coins(this.game, this.map, this.hud, this.hero);
+        }
+        update() {
+            this.game.physics.arcade.collide(this.hero, this.solids);
+        }
+    }
+    Begin.Map2 = Map2;
 })(Begin || (Begin = {}));
 //# sourceMappingURL=game.js.map

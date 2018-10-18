@@ -54,7 +54,9 @@ module Begin {
             this.game.load.spritesheet('enemies', 'assets/charsets/enemies.png', 16, 16);
             
             // Chargement des maps
+            this.game.load.json('lvldesign', 'assetS/maps/lvldesign.json');
             this.game.load.tilemap('map1', 'assets/maps/map1.json', null, Phaser.Tilemap.TILED_JSON);
+            this.game.load.tilemap('map2', 'assets/maps/map2.json', null, Phaser.Tilemap.TILED_JSON);
         }
 
         create () {

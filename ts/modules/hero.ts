@@ -5,9 +5,20 @@ module Begin {
         clavier: any;
         tchDirection: any;
         tchSaut: any;
+        
+        static nomLvl: string;        
+        static lvlDesign: any;
+        static x: number;
+        static y: number;
 
-        constructor (game: Phaser.Game, x: number, y: number) {
-            super(game, x, y, 'hero', 0);
+        constructor (game: Phaser.Game) {
+            if (Hero.x == null || Hero.y == null) {
+                let origine = Hero.getOrigineLvl(Hero.nomLvl);
+                Hero.x = origine[0];
+                Hero.y = origine[1];
+            }
+                
+            super(game, Hero.x, Hero.y, 'hero', 0);
             this.game = game;
 
             /*****************************************
@@ -19,8 +30,12 @@ module Begin {
 
             // Empêcher le héros de sortir des limites du terrain de jeu
             this.body.collideWorldBounds = true;
+            this.setCollisionWithLevelLimits();
             
+            // Bien positionner l'ancre au milieu du sprite du joueur
             this.anchor.setTo(0.5, 0.5);
+
+            // La caméra suit toujours l'ancre du sprite du joueur
             this.game.camera.follow(this);
 
             // Ajuster le masque de collision pour chaque frames du spritesheet de "player"
@@ -86,6 +101,105 @@ module Begin {
                 // Chuter
                 this.animations.play('fall');
             }
+
+            // Actions à effectuer lorsque le player atteint les limites de la map
+            this.sortDeLaMap(Hero.nomLvl);
+        }
+
+        sortDeLaMap (nomLvl: string) {
+            for (let level_key in Hero.lvlDesign) {
+                if (Hero.lvlDesign[level_key]['name'] == nomLvl) {
+                    let level = Hero.lvlDesign[level_key];
+                    
+                    // Si le joueur dépasse la limite gauche de la map
+                    if (this.body.x < level.limit_x_neg.axis) {
+                        let level_limit = level.limit_x_neg;
+                        this.consequences(level_limit);
+                    }
+
+                    // Si le joueur dépasse la limite droite de la map
+                    if (this.body.x > level.limit_x_pos.axis) {
+                        let level_limit = level.limit_x_pos;
+                        this.consequences(level_limit);
+                    }
+
+                    // Si le joueur dépasse la limite haute de la map
+                    if (this.body.y < level.limit_y_neg.axis) {
+                        let level_limit = level.limit_y_neg;
+                        this.consequences(level_limit);
+                    }
+
+                    // Si le joueur dépasse la limite basse de la map
+                    if (this.body.y > level.limit_y_pos.axis) {
+                        let level_limit = level.limit_y_pos;
+                        this.consequences(level_limit);
+                    }
+                }
+            }
+        }
+
+        private consequences (limit_level: any) {
+            if (limit_level.dead) {
+                this.meurt();
+            } 
+            
+            if (limit_level.map) {
+                let coordonnees = [limit_level.player_x, limit_level.player_y];
+                this.seTeleporte(limit_level.map, coordonnees);
+            }
+        }
+
+        meurt () {
+            this.seTeleporte(Hero.nomLvl);
+        }
+
+        seTeleporte (nomLvl: string, coordonnees: number[] = null) {
+            this.game.state.start(nomLvl);
+            
+            if(coordonnees == null) {   
+                coordonnees = Hero.getOrigineLvl(nomLvl);
+            }
+
+            Hero.x = coordonnees[0];
+            Hero.y = coordonnees[1];
+        }
+
+        setCollisionWithLevelLimits () {
+            for (let level_key in Hero.lvlDesign) {
+                if (Hero.lvlDesign[level_key]['name'] == Hero.nomLvl) {
+                    let level = Hero.lvlDesign[level_key];
+
+                    for (let limit_key in level) {
+                        switch (limit_key) {
+                            case 'limit_y_neg':
+                                this.game.physics.arcade.checkCollision.up = level[limit_key].collide;
+                                break;
+                            case 'limit_x_pos':
+                                this.game.physics.arcade.checkCollision.right = level[limit_key].collide;
+                                break;
+                            case 'limit_y_pos':
+                                this.game.physics.arcade.checkCollision.down = level[limit_key].collide;
+                                break;
+                            case 'limit_x_neg':
+                                this.game.physics.arcade.checkCollision.left = level[limit_key].collide;
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        static getOrigineLvl(nomLvl: string) {
+            let origine: number[];
+
+            for (let level_key in Hero.lvlDesign) {
+                if (Hero.lvlDesign[level_key]['name'] == nomLvl) {
+                    let level = Hero.lvlDesign[level_key];
+                    origine = [level['origin_player_x'], level['origin_player_y']];
+                }
+            }
+
+            return origine;
         }
     }
 }

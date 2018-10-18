@@ -1,0 +1,76 @@
+[
+    {
+        "name": "Map1",
+        "origin_player_x": 8, 
+        "origin_player_y": 120,
+        "limit_x_pos": {
+            "player_x": 8,
+            "player_y": 120,
+            "axis": 640,
+            "dead": false,
+            "map": "Map2",
+            "collide": false    
+        },
+        "limit_x_neg": {
+            "player_x": false,
+            "player_y": false,
+            "axis": 0,
+            "dead": false,
+            "map": false,
+            "collide": true
+        },
+        "limit_y_pos": {
+            "player_x": false,
+            "player_y": false,
+            "axis": 144,
+            "dead": true,
+            "map": false,
+            "collide": false
+        },
+        "limit_y_neg": {
+            "player_x": false,
+            "player_y": false,
+            "axis": 0,
+            "dead": false,
+            "map": false,
+            "collide": false
+        }
+    },
+    {
+        "name": "Map2",
+        "origin_player_x": 8,
+        "origin_player_y": 120,
+        "limit_x_pos": {
+            "player_x": false,
+            "player_y": false,
+            "axis": 160,
+            "dead": false,
+            "map": false,
+            "collide": true
+        },
+        "limit_x_neg": {
+            "player_x": 624,
+            "player_y": 80,
+            "axis": 0,
+            "dead": false,
+            "map": "Map1",
+            "collide": false
+        },
+        "limit_y_pos": {
+            "player_x": false,
+            "player_y": false,
+            "axis": 144,
+            "dead": true,
+            "map": false,
+            "collide": false
+        },
+        "limit_y_neg": {
+            "player_x": false,
+            "player_y": false,
+            "axis": 0,
+            "dead": false,
+            "map": false,
+            "collide": false
+        }
+    }
+]
