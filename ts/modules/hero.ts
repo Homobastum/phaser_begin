@@ -10,12 +10,17 @@ module Begin {
         static lvlDesign: any;
         static x: number;
         static y: number;
+        static sens: number;
 
         constructor (game: Phaser.Game) {
             if (Hero.x == null || Hero.y == null) {
                 let origine = Hero.getOrigineLvl(Hero.nomLvl);
                 Hero.x = origine[0];
                 Hero.y = origine[1];
+            }
+
+            if (Hero.sens == null) {
+                Hero.sens = 1;
             }
                 
             super(game, Hero.x, Hero.y, 'hero', 0);
@@ -52,6 +57,8 @@ module Begin {
             this.animations.add('jump', [8], 10, true);
             this.animations.add('fall', [9], 10, true);
 
+            this.scale.x = Hero.sens;
+
             /***********************************
              * Création des contrôles du héros *
              ***********************************/
@@ -76,13 +83,13 @@ module Begin {
             if (this.tchDirection.left.isDown) {
                 // Aller à gauche
                 this.body.velocity.x = -100;
-                this.scale.x = -1; // Pour tourner le sprite vers la gauche
+                Hero.sens = this.scale.x = -1; // Pour tourner le sprite vers la gauche
                 this.body.blocked.down ? this.animations.play('run') : false;
             }
             else if (this.tchDirection.right.isDown) {
                 // Aller à droite
                 this.body.velocity.x = 100;
-                this.scale.x = 1; // Pour tourner le sprite vers la droite
+                Hero.sens = this.scale.x = 1; // Pour tourner le sprite vers la droite
                 this.body.blocked.down ? this.animations.play('run') : false;
             } else {
                 // Rester debout (avec respiration)
@@ -154,6 +161,7 @@ module Begin {
         }
 
         seTeleporte (nomLvl: string, coordonnees: number[] = null) {
+            this.scale.x = -1;
             this.game.state.start(nomLvl);
             
             if(coordonnees == null) {   

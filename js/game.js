@@ -96,7 +96,7 @@ var Begin;
         create() {
             this.titleScreen = this.add.sprite(this.world.centerX, this.world.centerY, 'title_screen');
             this.titleScreen.anchor.setTo(0.5, 0.5);
-            this.game.time.events.add(1000, this.changeState, this, 'Map2');
+            this.game.time.events.add(1000, this.changeState, this, 'Map1');
         }
         update() {
         }
@@ -122,6 +122,9 @@ var Begin;
                 Hero.x = origine[0];
                 Hero.y = origine[1];
             }
+            if (Hero.sens == null) {
+                Hero.sens = 1;
+            }
             super(game, Hero.x, Hero.y, 'hero', 0);
             this.game = game;
             this.game.physics.arcade.enable(this);
@@ -136,6 +139,7 @@ var Begin;
             this.animations.add('run', [5, 6, 7], 10, true);
             this.animations.add('jump', [8], 10, true);
             this.animations.add('fall', [9], 10, true);
+            this.scale.x = Hero.sens;
             this.clavier = this.game.input.keyboard;
             this.tchDirection = this.game.input.keyboard.createCursorKeys();
             this.tchSaut = Phaser.Keyboard.SPACEBAR;
@@ -146,12 +150,12 @@ var Begin;
             this.body.velocity.x = 0;
             if (this.tchDirection.left.isDown) {
                 this.body.velocity.x = -100;
-                this.scale.x = -1;
+                Hero.sens = this.scale.x = -1;
                 this.body.blocked.down ? this.animations.play('run') : false;
             }
             else if (this.tchDirection.right.isDown) {
                 this.body.velocity.x = 100;
-                this.scale.x = 1;
+                Hero.sens = this.scale.x = 1;
                 this.body.blocked.down ? this.animations.play('run') : false;
             }
             else {
@@ -204,6 +208,7 @@ var Begin;
             this.seTeleporte(Hero.nomLvl);
         }
         seTeleporte(nomLvl, coordonnees = null) {
+            this.scale.x = -1;
             this.game.state.start(nomLvl);
             if (coordonnees == null) {
                 coordonnees = Hero.getOrigineLvl(nomLvl);
