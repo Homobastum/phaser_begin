@@ -1,11 +1,12 @@
 [
     {
         "name": "Map1",
-        "origin_player_x": 8, 
-        "origin_player_y": 120,
+        "position_adjustement": 8,
+        "origin_player_x": 0, 
+        "origin_player_y": 112,
         "limit_x_pos": {
-            "player_x": 8,
-            "player_y": 120,
+            "player_x": 0,
+            "player_y": 112,
             "axis": 640,
             "dead": false,
             "map": "Map2",
@@ -38,8 +39,9 @@
     },
     {
         "name": "Map2",
-        "origin_player_x": 8,
-        "origin_player_y": 120,
+        "position_adjustement": 8,
+        "origin_player_x": 0,
+        "origin_player_y": 112,
         "limit_x_pos": {
             "player_x": false,
             "player_y": false,

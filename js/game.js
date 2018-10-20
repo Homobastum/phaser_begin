@@ -176,32 +176,32 @@ var Begin;
             for (let level_key in Hero.lvlDesign) {
                 if (Hero.lvlDesign[level_key]['name'] == nomLvl) {
                     let level = Hero.lvlDesign[level_key];
-                    if (this.body.x < level.limit_x_neg.axis) {
-                        let level_limit = level.limit_x_neg;
-                        this.consequences(level_limit);
+                    if (this.body.y < level.limit_y_neg.axis) {
+                        let level_limit = level.limit_y_neg;
+                        this.consequences(level, level_limit);
                     }
                     if (this.body.x > level.limit_x_pos.axis) {
                         let level_limit = level.limit_x_pos;
-                        this.consequences(level_limit);
-                    }
-                    if (this.body.y < level.limit_y_neg.axis) {
-                        let level_limit = level.limit_y_neg;
-                        this.consequences(level_limit);
+                        this.consequences(level, level_limit);
                     }
                     if (this.body.y > level.limit_y_pos.axis) {
                         let level_limit = level.limit_y_pos;
-                        this.consequences(level_limit);
+                        this.consequences(level, level_limit);
+                    }
+                    if (this.body.x < level.limit_x_neg.axis) {
+                        let level_limit = level.limit_x_neg;
+                        this.consequences(level, level_limit);
                     }
                 }
             }
         }
-        consequences(limit_level) {
-            if (limit_level.dead) {
+        consequences(level, level_limit) {
+            if (level_limit.dead) {
                 this.meurt();
             }
-            if (limit_level.map) {
-                let coordonnees = [limit_level.player_x, limit_level.player_y];
-                this.seTeleporte(limit_level.map, coordonnees);
+            if (level_limit.map) {
+                let coordonnees = [level_limit.player_x + level.position_adjustement, level_limit.player_y + level.position_adjustement];
+                this.seTeleporte(level_limit.map, coordonnees);
             }
         }
         meurt() {
@@ -244,7 +244,7 @@ var Begin;
             for (let level_key in Hero.lvlDesign) {
                 if (Hero.lvlDesign[level_key]['name'] == nomLvl) {
                     let level = Hero.lvlDesign[level_key];
-                    origine = [level['origin_player_x'], level['origin_player_y']];
+                    origine = [level['origin_player_x'] + level.position_adjustement, level['origin_player_y'] + level.position_adjustement];
                 }
             }
             return origine;
