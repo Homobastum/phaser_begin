@@ -176,19 +176,19 @@ var Begin;
             for (let level_key in Hero.lvlDesign) {
                 if (Hero.lvlDesign[level_key]['name'] == nomLvl) {
                     let level = Hero.lvlDesign[level_key];
-                    if (this.body.y < level.limit_y_neg.axis) {
+                    if (this.body.y < level.limit_y_neg.axis - level.position_adjustement) {
                         let level_limit = level.limit_y_neg;
                         this.consequences(level, level_limit);
                     }
-                    if (this.body.x > level.limit_x_pos.axis) {
+                    if (this.body.x > level.limit_x_pos.axis + level.position_adjustement) {
                         let level_limit = level.limit_x_pos;
                         this.consequences(level, level_limit);
                     }
-                    if (this.body.y > level.limit_y_pos.axis) {
+                    if (this.body.y > level.limit_y_pos.axis + level.position_adjustement) {
                         let level_limit = level.limit_y_pos;
                         this.consequences(level, level_limit);
                     }
-                    if (this.body.x < level.limit_x_neg.axis) {
+                    if (this.body.x < level.limit_x_neg.axis - level.position_adjustement) {
                         let level_limit = level.limit_x_neg;
                         this.consequences(level, level_limit);
                     }
@@ -208,7 +208,6 @@ var Begin;
             this.seTeleporte(Hero.nomLvl);
         }
         seTeleporte(nomLvl, coordonnees = null) {
-            this.scale.x = -1;
             this.game.state.start(nomLvl);
             if (coordonnees == null) {
                 coordonnees = Hero.getOrigineLvl(nomLvl);
@@ -277,7 +276,7 @@ var Begin;
             this.background = this.map.createLayer('background');
             this.behind = this.map.createLayer('behind');
             this.solids = this.map.createLayer('solids');
-            this.game.world.setBounds(160, 144, 640, 144);
+            this.game.world.setBounds(160, 144, 624, 144);
             this.map.setCollisionBetween(0, 168, true, this.solids);
             this.background.resizeWorld();
             Begin.Hero.lvlDesign = this.game.cache.getJSON('lvldesign');
@@ -306,9 +305,9 @@ var Begin;
             Begin.Hero.lvlDesign = this.game.cache.getJSON('lvldesign');
             Begin.Hero.nomLvl = 'Map2';
             this.hero = new Begin.Hero(this.game);
-            this.front = this.map.createLayer('front');
             this.hud = new Begin.HUD(this.game);
             this.coins = new Begin.Coins(this.game, this.map, this.hud, this.hero);
+            this.front = this.map.createLayer('front');
         }
         update() {
             this.game.physics.arcade.collide(this.hero, this.solids);

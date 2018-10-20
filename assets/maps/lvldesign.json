@@ -7,7 +7,7 @@
         "limit_x_pos": {
             "player_x": 0,
             "player_y": 112,
-            "axis": 640,
+            "axis": 624,
             "dead": false,
             "map": "Map2",
             "collide": false    

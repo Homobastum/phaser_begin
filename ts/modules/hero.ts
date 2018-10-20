@@ -126,25 +126,25 @@ module Begin {
                     let level = Hero.lvlDesign[level_key];
                     
                     // Si le joueur dépasse la limite haute de la map
-                    if (this.body.y < level.limit_y_neg.axis) {
+                    if (this.body.y < level.limit_y_neg.axis - level.position_adjustement) {
                         let level_limit = level.limit_y_neg;
                         this.consequences(level, level_limit);
                     }
 
                     // Si le joueur dépasse la limite droite de la map
-                    if (this.body.x > level.limit_x_pos.axis) {
+                    if (this.body.x > level.limit_x_pos.axis + level.position_adjustement) {
                         let level_limit = level.limit_x_pos;
                         this.consequences(level, level_limit);
                     }
                     
                     // Si le joueur dépasse la limite basse de la map
-                    if (this.body.y > level.limit_y_pos.axis) {
+                    if (this.body.y > level.limit_y_pos.axis + level.position_adjustement) {
                         let level_limit = level.limit_y_pos;
                         this.consequences(level, level_limit);
                     }
                     
                     // Si le joueur dépasse la limite gauche de la map
-                    if (this.body.x < level.limit_x_neg.axis) {
+                    if (this.body.x < level.limit_x_neg.axis - level.position_adjustement) {
                         let level_limit = level.limit_x_neg;
                         this.consequences(level, level_limit);
                     }
@@ -168,13 +168,12 @@ module Begin {
         }
 
         seTeleporte (nomLvl: string, coordonnees: number[] = null) {
-            this.scale.x = -1;
             this.game.state.start(nomLvl);
             
             if(coordonnees == null) {   
                 coordonnees = Hero.getOrigineLvl(nomLvl);
             }
-
+            
             Hero.x = coordonnees[0];
             Hero.y = coordonnees[1];
         }

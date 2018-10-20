@@ -31,7 +31,7 @@ module Begin {
             this.solids = this.map.createLayer('solids');
             
             // Ajuster les collisions de la map
-            this.game.world.setBounds(160, 144, 640, 144);
+            this.game.world.setBounds(160, 144, 624, 144);
             this.map.setCollisionBetween(0, 168, true, this.solids);
             
             // Adapter les calques à la map
@@ -114,12 +114,6 @@ module Begin {
             Hero.nomLvl = 'Map2';
             this.hero = new Hero(this.game);
 
-            /* 
-            Layer "Front" spécial qui doit être créé après le player
-            car doit être affiché devant lui
-            */
-            this.front = this.map.createLayer('front');
-
             /***********************
              * Création des objets *
              ***********************/
@@ -128,6 +122,12 @@ module Begin {
             
             // Création des pièces collectables
             this.coins = new Coins(this.game, this.map, this.hud, this.hero);
+
+            /* 
+            Layer "Front" spécial qui doit être créé après le player
+            car doit être affiché devant lui
+            */
+            this.front = this.map.createLayer('front');
         }
         
         update () {
