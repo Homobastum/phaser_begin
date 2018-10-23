@@ -41,6 +41,9 @@ module Begin {
             // Chargement des images
             this.game.load.image('logo', 'assets/img/logo.png');
             this.game.load.image('title_screen', 'assets/img/title_screen.png');
+            this.game.load.image('spring_bg_1', 'assets/img/spring_bg_1.png');
+            this.game.load.image('spring_bg_2', 'assets/img/spring_bg_2.png');
+            this.game.load.image('spring_bg_3', 'assets/img/spring_bg_3.png');
             
             // Chargement des tilesets
             this.game.load.image('spring', 'assets/tilesets/spring.png');

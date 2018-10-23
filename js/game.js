@@ -3,7 +3,7 @@ var Begin;
     Begin.score = 0;
     class Jeu extends Phaser.Game {
         constructor() {
-            super(160, 144, Phaser.AUTO, '', null);
+            super(160, 144, Phaser.AUTO, '', null, false, false);
             this.state.add('Boot', Begin.Boot, false);
             this.state.add('Preloader', Begin.Preloader, false);
             this.state.add('TitleScreen', Begin.TitleScreen, false);
@@ -37,6 +37,9 @@ var Begin;
             this.load.audio('jump', 'assets/sounds/jump.mp3', true);
             this.game.load.image('logo', 'assets/img/logo.png');
             this.game.load.image('title_screen', 'assets/img/title_screen.png');
+            this.game.load.image('spring_bg_1', 'assets/img/spring_bg_1.png');
+            this.game.load.image('spring_bg_2', 'assets/img/spring_bg_2.png');
+            this.game.load.image('spring_bg_3', 'assets/img/spring_bg_3.png');
             this.game.load.image('spring', 'assets/tilesets/spring.png');
             this.game.load.image('summer', 'assets/tilesets/summer.png');
             this.game.load.image('autumn', 'assets/tilesets/autumn.png');
@@ -273,12 +276,21 @@ var Begin;
             this.map = this.game.add.tilemap('map1');
             this.map.addTilesetImage('spring', 'spring');
             this.game.camera.setPosition(160, 144);
-            this.background = this.map.createLayer('background');
+            this.bg_1 = this.game.add.tileSprite(0, 0, 256, 256, 'spring_bg_1');
+            this.bg_1.smoothed = false;
+            this.bg_1.fixedToCamera = true;
+            this.bg_2 = this.game.add.tileSprite(0, 0, 256, 256, 'spring_bg_2');
+            this.bg_2.smoothed = false;
+            this.bg_2.fixedToCamera = true;
+            this.bg_3 = this.game.add.tileSprite(0, 0, 256, 256, 'spring_bg_3');
+            this.bg_3.smoothed = false;
+            this.bg_3.fixedToCamera = true;
             this.behind = this.map.createLayer('behind');
             this.solids = this.map.createLayer('solids');
             this.game.world.setBounds(160, 144, 624, 144);
             this.map.setCollisionBetween(0, 168, true, this.solids);
-            this.background.resizeWorld();
+            this.behind.resizeWorld();
+            this.solids.resizeWorld();
             Begin.Hero.lvlDesign = this.game.cache.getJSON('lvldesign');
             Begin.Hero.nomLvl = 'Map1';
             this.hero = new Begin.Hero(this.game);
@@ -287,6 +299,12 @@ var Begin;
             this.coins = new Begin.Coins(this.game, this.map, this.hud, this.hero);
         }
         update() {
+            this.bg_1.tilePosition.x = -(this.camera.x * 0.5);
+            this.bg_2.tilePosition.x = -(this.camera.x * 0.7);
+            this.bg_3.tilePosition.x = -(this.camera.x * 0.9);
+            this.bg_1.tilePosition.y = -(this.camera.y * 0.5);
+            this.bg_2.tilePosition.y = -(this.camera.y * 0.7);
+            this.bg_3.tilePosition.y = -(this.camera.y * 0.9);
             this.game.physics.arcade.collide(this.hero, this.solids);
         }
     }

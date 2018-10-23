@@ -10,7 +10,7 @@ module Begin {
             /**********************
              * Création du canvas *
              **********************/
-            super(160, 144, Phaser.AUTO, '', null);
+            super(160, 144, Phaser.AUTO, '', null, false, false);
 
             /*****************************************
              * Gestion des écrans (ou states) du jeu *

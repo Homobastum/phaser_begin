@@ -5,7 +5,9 @@ module Begin {
         coins: Begin.Coins;
 
         map: Phaser.Tilemap;
-        background: Phaser.TilemapLayer;
+        bg_1: Phaser.TileSprite;
+        bg_2: Phaser.TileSprite;
+        bg_3: Phaser.TileSprite;
         behind: Phaser.TilemapLayer;
         solids: Phaser.TilemapLayer;
         front: Phaser.TilemapLayer;
@@ -22,11 +24,24 @@ module Begin {
             // Positionner la caméra
             this.game.camera.setPosition(160, 144);
 
+            // Création des backgrounds
+            this.bg_1 = this.game.add.tileSprite(0, 0, 256, 256, 'spring_bg_1');
+            this.bg_1.smoothed = false;
+            this.bg_1.fixedToCamera = true;
+
+            this.bg_2 = this.game.add.tileSprite(0, 0, 256, 256, 'spring_bg_2');
+            this.bg_2.smoothed = false;
+            this.bg_2.fixedToCamera = true;
+
+            this.bg_3 = this.game.add.tileSprite(0, 0, 256, 256, 'spring_bg_3');
+            this.bg_3.smoothed = false;
+            this.bg_3.fixedToCamera = true;
+
             // Création des calques 
             // /!\ Respecter la superposition de l'axe z des couches. /!\ 
             // /!\ Le premier calque créé correspond à l'arrière-plan /!\
             // /!\ Le dernier calque créé correspond au premier plan /!\
-            this.background = this.map.createLayer('background');
+            // this.background = this.map.createLayer('background');
             this.behind = this.map.createLayer('behind');
             this.solids = this.map.createLayer('solids');
             
@@ -35,7 +50,8 @@ module Begin {
             this.map.setCollisionBetween(0, 168, true, this.solids);
             
             // Adapter les calques à la map
-            this.background.resizeWorld();
+            this.behind.resizeWorld();
+            this.solids.resizeWorld();
             
             /**********************
              * Création du joueur *
@@ -61,6 +77,17 @@ module Begin {
         }
         
         update () {
+            /***********************************
+             * Gestion des parallax background *
+             ***********************************/
+            this.bg_1.tilePosition.x = -(this.camera.x * 0.5); 
+            this.bg_2.tilePosition.x = -(this.camera.x * 0.7); 
+            this.bg_3.tilePosition.x = -(this.camera.x * 0.9); 
+
+            this.bg_1.tilePosition.y = -(this.camera.y * 0.5); 
+            this.bg_2.tilePosition.y = -(this.camera.y * 0.7); 
+            this.bg_3.tilePosition.y = -(this.camera.y * 0.9); 
+
             /**************************
              * Gestion des collisions *
              **************************/
