@@ -271,18 +271,24 @@ var Begin;
 })(Begin || (Begin = {}));
 var Begin;
 (function (Begin) {
-    class Map1 extends Phaser.State {
+    class Map {
+        constructor(game, tilemap, tileset, backgrounds) {
+            this.game = game;
+            this.tilemap = tilemap;
+            this.tileset = tileset;
+            this.backgrounds = backgrounds;
+        }
         create() {
-            this.map = this.game.add.tilemap('map1');
-            this.map.addTilesetImage('spring', 'spring');
+            this.map = this.game.add.tilemap(this.tilemap);
+            this.map.addTilesetImage(this.tileset[0], this.tileset[1]);
             this.game.camera.setPosition(160, 144);
-            this.bg_1 = this.game.add.tileSprite(0, 0, 256, 256, 'spring_bg_1');
+            this.bg_1 = this.game.add.tileSprite(0, 0, 256, 256, this.backgrounds[0]);
             this.bg_1.smoothed = false;
             this.bg_1.fixedToCamera = true;
-            this.bg_2 = this.game.add.tileSprite(0, 0, 256, 256, 'spring_bg_2');
+            this.bg_2 = this.game.add.tileSprite(0, 0, 256, 256, this.backgrounds[1]);
             this.bg_2.smoothed = false;
             this.bg_2.fixedToCamera = true;
-            this.bg_3 = this.game.add.tileSprite(0, 0, 256, 256, 'spring_bg_3');
+            this.bg_3 = this.game.add.tileSprite(0, 0, 256, 256, this.backgrounds[2]);
             this.bg_3.smoothed = false;
             this.bg_3.fixedToCamera = true;
             this.behind = this.map.createLayer('behind');
@@ -294,41 +300,45 @@ var Begin;
             Begin.Hero.lvlDesign = this.game.cache.getJSON('lvldesign');
             Begin.Hero.nomLvl = 'Map1';
             this.hero = new Begin.Hero(this.game);
-            this.front = this.map.createLayer('front');
             this.hud = new Begin.HUD(this.game);
             this.coins = new Begin.Coins(this.game, this.map, this.hud, this.hero);
+            this.front = this.map.createLayer('front');
         }
         update() {
-            this.bg_1.tilePosition.x = -(this.camera.x * 0.5);
-            this.bg_2.tilePosition.x = -(this.camera.x * 0.7);
-            this.bg_3.tilePosition.x = -(this.camera.x * 0.9);
-            this.bg_1.tilePosition.y = -(this.camera.y * 0.5);
-            this.bg_2.tilePosition.y = -(this.camera.y * 0.7);
-            this.bg_3.tilePosition.y = -(this.camera.y * 0.9);
+            this.bg_1.tilePosition.x = -(this.game.camera.x * 0.5);
+            this.bg_2.tilePosition.x = -(this.game.camera.x * 0.7);
+            this.bg_3.tilePosition.x = -(this.game.camera.x * 0.9);
+            this.bg_1.tilePosition.y = -(this.game.camera.y * 0.5);
+            this.bg_2.tilePosition.y = -(this.game.camera.y * 0.7);
+            this.bg_3.tilePosition.y = -(this.game.camera.y * 0.9);
             this.game.physics.arcade.collide(this.hero, this.solids);
+        }
+    }
+    Begin.Map = Map;
+})(Begin || (Begin = {}));
+var Begin;
+(function (Begin) {
+    class Map1 extends Phaser.State {
+        create() {
+            let tileset = ['spring', 'spring'];
+            let backgrounds = ['spring_bg_1', 'spring_bg_2', 'spring_bg_3'];
+            this.map = new Begin.Map(this.game, 'map1', tileset, backgrounds);
+            this.map.create();
+        }
+        update() {
+            this.map.update();
         }
     }
     Begin.Map1 = Map1;
     class Map2 extends Phaser.State {
         create() {
-            this.map = this.game.add.tilemap('map2');
-            this.map.addTilesetImage('spring', 'spring');
-            this.game.camera.setPosition(160, 144);
-            this.background = this.map.createLayer('background');
-            this.behind = this.map.createLayer('behind');
-            this.solids = this.map.createLayer('solids');
-            this.game.world.setBounds(160, 144, 160, 144);
-            this.map.setCollisionBetween(0, 168, true, this.solids);
-            this.background.resizeWorld();
-            Begin.Hero.lvlDesign = this.game.cache.getJSON('lvldesign');
-            Begin.Hero.nomLvl = 'Map2';
-            this.hero = new Begin.Hero(this.game);
-            this.hud = new Begin.HUD(this.game);
-            this.coins = new Begin.Coins(this.game, this.map, this.hud, this.hero);
-            this.front = this.map.createLayer('front');
+            let tileset = ['spring', 'spring'];
+            let backgrounds = ['spring_bg_1', 'spring_bg_2', 'spring_bg_3'];
+            this.map = new Begin.Map(this.game, 'map2', tileset, backgrounds);
+            this.map.create();
         }
         update() {
-            this.game.physics.arcade.collide(this.hero, this.solids);
+            this.map.update();
         }
     }
     Begin.Map2 = Map2;
