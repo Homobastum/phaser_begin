@@ -272,8 +272,9 @@ var Begin;
 var Begin;
 (function (Begin) {
     class Map {
-        constructor(game, tilemap, tileset, backgrounds) {
+        constructor(game, nomLvl, tilemap, tileset, backgrounds) {
             this.game = game;
+            this.nomLvl = nomLvl;
             this.tilemap = tilemap;
             this.tileset = tileset;
             this.backgrounds = backgrounds;
@@ -298,7 +299,7 @@ var Begin;
             this.behind.resizeWorld();
             this.solids.resizeWorld();
             Begin.Hero.lvlDesign = this.game.cache.getJSON('lvldesign');
-            Begin.Hero.nomLvl = 'Map1';
+            Begin.Hero.nomLvl = this.nomLvl;
             this.hero = new Begin.Hero(this.game);
             this.hud = new Begin.HUD(this.game);
             this.coins = new Begin.Coins(this.game, this.map, this.hud, this.hero);
@@ -320,9 +321,11 @@ var Begin;
 (function (Begin) {
     class Map1 extends Phaser.State {
         create() {
+            let nomLevel = 'Map1';
+            let tilemap = 'map1';
             let tileset = ['spring', 'spring'];
             let backgrounds = ['spring_bg_1', 'spring_bg_2', 'spring_bg_3'];
-            this.map = new Begin.Map(this.game, 'map1', tileset, backgrounds);
+            this.map = new Begin.Map(this.game, nomLevel, tilemap, tileset, backgrounds);
             this.map.create();
         }
         update() {
@@ -332,9 +335,11 @@ var Begin;
     Begin.Map1 = Map1;
     class Map2 extends Phaser.State {
         create() {
+            let nomLevel = 'Map2';
+            let tilemap = 'map2';
             let tileset = ['spring', 'spring'];
             let backgrounds = ['spring_bg_1', 'spring_bg_2', 'spring_bg_3'];
-            this.map = new Begin.Map(this.game, 'map2', tileset, backgrounds);
+            this.map = new Begin.Map(this.game, nomLevel, tilemap, tileset, backgrounds);
             this.map.create();
         }
         update() {

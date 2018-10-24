@@ -3,9 +3,11 @@ module Begin {
         map: Begin.Map;
 
         create () {
+            let nomLevel = 'Map1';
+            let tilemap = 'map1';
             let tileset = ['spring', 'spring'];
             let backgrounds = ['spring_bg_1', 'spring_bg_2', 'spring_bg_3'];
-            this.map = new Map(this.game, 'map1', tileset, backgrounds);
+            this.map = new Map(this.game, nomLevel, tilemap, tileset, backgrounds);
 
             this.map.create();
         }
@@ -19,9 +21,11 @@ module Begin {
         map: Begin.Map;
 
         create() {
+            let nomLevel = 'Map2';
+            let tilemap = 'map2';
             let tileset = ['spring', 'spring'];
             let backgrounds = ['spring_bg_1', 'spring_bg_2', 'spring_bg_3'];
-            this.map = new Map(this.game, 'map2', tileset, backgrounds);
+            this.map = new Map(this.game, nomLevel, tilemap, tileset, backgrounds);
 
             this.map.create();
         }

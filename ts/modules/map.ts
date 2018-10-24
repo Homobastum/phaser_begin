@@ -1,6 +1,7 @@
 module Begin {
     export class Map {
         game: Phaser.Game;
+        nomLvl: string;
         tilemap: string;
         tileset: string[];
         backgrounds: string[];
@@ -17,8 +18,9 @@ module Begin {
         solids: Phaser.TilemapLayer;
         front: Phaser.TilemapLayer;
 
-        constructor(game: Phaser.Game, tilemap: string, tileset: string[], backgrounds: string[]) {
+        constructor(game: Phaser.Game, nomLvl: string, tilemap: string, tileset: string[], backgrounds: string[]) {
             this.game = game;
+            this.nomLvl = nomLvl;
             this.tilemap = tilemap;
             this.tileset = tileset;
             this.backgrounds = backgrounds;
@@ -69,7 +71,7 @@ module Begin {
              * Création du joueur *
              **********************/
             Hero.lvlDesign = this.game.cache.getJSON('lvldesign');
-            Hero.nomLvl = 'Map1';
+            Hero.nomLvl = this.nomLvl;
             this.hero = new Hero(this.game);
 
             /***********************
