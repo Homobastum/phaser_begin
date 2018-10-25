@@ -4,13 +4,12 @@ var Begin;
     class Jeu extends Phaser.Game {
         constructor() {
             super(160, 144, Phaser.AUTO, '', null, false, false);
-            this.state.add('Boot', Begin.Boot, false);
+            this.state.add('Boot', Begin.Boot, true);
             this.state.add('Preloader', Begin.Preloader, false);
             this.state.add('TitleScreen', Begin.TitleScreen, false);
             this.state.add('TitleMenu', Begin.TitleMenu, false);
             this.state.add('Map1', Begin.Map1, false);
             this.state.add('Map2', Begin.Map2, false);
-            this.state.start('Boot');
         }
     }
     Begin.Jeu = Jeu;
@@ -33,6 +32,7 @@ var Begin;
     Begin.Boot = Boot;
     class Preloader extends Phaser.State {
         preload() {
+            this.game.load.bitmapFont('retrofont', 'assets/fonts/retrofont.png', 'assets/fonts/retrofont.xml');
             this.load.audio('coin', 'assets/sounds/coin.mp3', true);
             this.load.audio('jump', 'assets/sounds/jump.mp3', true);
             this.game.load.image('logo', 'assets/img/logo.png');
@@ -40,6 +40,7 @@ var Begin;
             this.game.load.image('spring_bg_1', 'assets/img/spring_bg_1.png');
             this.game.load.image('spring_bg_2', 'assets/img/spring_bg_2.png');
             this.game.load.image('spring_bg_3', 'assets/img/spring_bg_3.png');
+            this.game.load.image('hud', 'assets/img/hud.png');
             this.game.load.image('spring', 'assets/tilesets/spring.png');
             this.game.load.image('summer', 'assets/tilesets/summer.png');
             this.game.load.image('autumn', 'assets/tilesets/autumn.png');
@@ -52,6 +53,7 @@ var Begin;
             this.game.load.tilemap('map2', 'assets/maps/map2.json', null, Phaser.Tilemap.TILED_JSON);
         }
         create() {
+            this.changeState('Map1');
             this.logo = this.add.sprite(this.world.centerX, this.world.centerY, 'logo');
             this.logo.anchor.setTo(0.5, 0.5);
             this.logo.scale.setTo(1, 1);
@@ -259,12 +261,14 @@ var Begin;
     class HUD extends Phaser.Group {
         constructor(game) {
             super(game);
+            this.game = game;
             this.fixedToCamera = true;
-            this.scoreText = game.add.text(4, 4, 'Coins: 0', { font: '10pt Revalia' }, this);
+            this.bgHud = this.game.add.sprite(0, 0, 'hud', null, this);
+            this.scoreText = this.game.add.bitmapText(77, 2, 'retrofont', 'x ' + Begin.score, 12, this);
         }
         augmenterScore() {
             Begin.score += 1;
-            this.scoreText.setText('Coins: ' + Begin.score);
+            this.scoreText.setText('x ' + Begin.score);
         }
     }
     Begin.HUD = HUD;

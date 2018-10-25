@@ -34,6 +34,9 @@ module Begin {
             /*************************
              * Chargement des assets *
              *************************/
+            // Chargement des polices
+            this.game.load.bitmapFont('retrofont', 'assets/fonts/retrofont.png', 'assets/fonts/retrofont.xml');
+
             // Chargement des sons
             this.load.audio('coin', 'assets/sounds/coin.mp3', true);
             this.load.audio('jump', 'assets/sounds/jump.mp3', true);
@@ -44,6 +47,7 @@ module Begin {
             this.game.load.image('spring_bg_1', 'assets/img/spring_bg_1.png');
             this.game.load.image('spring_bg_2', 'assets/img/spring_bg_2.png');
             this.game.load.image('spring_bg_3', 'assets/img/spring_bg_3.png');
+            this.game.load.image('hud', 'assets/img/hud.png');
             
             // Chargement des tilesets
             this.game.load.image('spring', 'assets/tilesets/spring.png');
@@ -63,6 +67,8 @@ module Begin {
         }
 
         create () {
+            this.changeState('Map1');
+            
             // Afficher le splash screen "HB Lab"
             this.logo = this.add.sprite(this.world.centerX, this.world.centerY, 'logo');
             this.logo.anchor.setTo(0.5, 0.5);
