@@ -67,19 +67,21 @@ module Begin {
             this.behind.resizeWorld();
             this.solids.resizeWorld();
 
+            /*******************
+             * Création du HUD *
+             *******************/
+            this.hud = new HUD(this.game);
+
             /**********************
              * Création du joueur *
              **********************/
             Hero.lvlDesign = this.game.cache.getJSON('lvldesign');
             Hero.nomLvl = this.nomLvl;
-            this.hero = new Hero(this.game);
+            this.hero = new Hero(this.game, this.hud);
 
             /***********************
              * Création des objets *
              ***********************/
-            // Création du HUD
-            this.hud = new HUD(this.game);
-
             // Création des pièces collectables
             this.coins = new Coins(this.game, this.map, this.hud, this.hero);
 

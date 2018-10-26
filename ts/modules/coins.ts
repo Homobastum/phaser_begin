@@ -38,7 +38,7 @@ module Begin {
             */         
             this.game.physics.arcade.overlap(this.hero, this, (hero: Begin.Hero, coin: Phaser.Sprite) => {
                 this.coinFx.play();
-                this.hud.augmenterScore();
+                this.hud.augmenterNbPieces();
                 coin.kill();
             });
         }

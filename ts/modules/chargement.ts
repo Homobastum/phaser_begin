@@ -47,7 +47,9 @@ module Begin {
             this.game.load.image('spring_bg_1', 'assets/img/spring_bg_1.png');
             this.game.load.image('spring_bg_2', 'assets/img/spring_bg_2.png');
             this.game.load.image('spring_bg_3', 'assets/img/spring_bg_3.png');
-            this.game.load.image('hud', 'assets/img/hud.png');
+            this.game.load.image('hud_bg', 'assets/img/hud_bg.png');
+            this.game.load.image('hud_hp', 'assets/img/hud_hp.png');
+            this.game.load.image('hud_mp', 'assets/img/hud_mp.png');
             
             // Chargement des tilesets
             this.game.load.image('spring', 'assets/tilesets/spring.png');
@@ -67,6 +69,7 @@ module Begin {
         }
 
         create () {
+            // Fast debug (à supprimer lorsque le développement du jeu sera terminé)
             this.changeState('Map1');
             
             // Afficher le splash screen "HB Lab"
@@ -74,7 +77,7 @@ module Begin {
             this.logo.anchor.setTo(0.5, 0.5);
             this.logo.scale.setTo(1, 1);
 
-            // Aller à l'écran titre après 3 secondes d'affichage
+            // Aller à l'écran titre après 1 seconde d'affichage
             this.game.time.events.add(1000, this.changeState, this, 'TitleScreen');
         }
 

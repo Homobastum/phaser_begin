@@ -1,6 +1,7 @@
 module Begin {
     export class Hero extends Phaser.Sprite {
         game: Phaser.Game;
+        hud: Begin.HUD;
         jumpFx: Phaser.Sound;
         clavier: any;
         tchDirection: any;
@@ -11,8 +12,12 @@ module Begin {
         static x: number;
         static y: number;
         static sens: number;
+        static hpMax: number = 10;
+        static hp: number;
+        static mpMax: number = 10;
+        static mp: number;
 
-        constructor (game: Phaser.Game) {
+        constructor (game: Phaser.Game, hud: Begin.HUD) {
             if (Hero.x == null || Hero.y == null) {
                 let origine = Hero.getOrigineLvl(Hero.nomLvl);
                 Hero.x = origine[0];
@@ -25,6 +30,7 @@ module Begin {
                 
             super(game, Hero.x, Hero.y, 'hero', 0);
             this.game = game;
+            this.hud = hud;
 
             /*****************************************
              * Configuration de la physique du héros *
@@ -77,6 +83,12 @@ module Begin {
              * Création du héros dans le jeu *
              *********************************/
             this.game.add.existing(this);
+
+            Hero.hp = 6;
+            Hero.mp = 0;
+
+            this.hud.setHpBar();
+            this.hud.setMpBar();
         }
 
         update () {

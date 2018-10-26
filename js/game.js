@@ -1,6 +1,6 @@
 var Begin;
 (function (Begin) {
-    Begin.score = 0;
+    Begin.coins = 0;
     class Jeu extends Phaser.Game {
         constructor() {
             super(160, 144, Phaser.AUTO, '', null, false, false);
@@ -40,7 +40,9 @@ var Begin;
             this.game.load.image('spring_bg_1', 'assets/img/spring_bg_1.png');
             this.game.load.image('spring_bg_2', 'assets/img/spring_bg_2.png');
             this.game.load.image('spring_bg_3', 'assets/img/spring_bg_3.png');
-            this.game.load.image('hud', 'assets/img/hud.png');
+            this.game.load.image('hud_bg', 'assets/img/hud_bg.png');
+            this.game.load.image('hud_hp', 'assets/img/hud_hp.png');
+            this.game.load.image('hud_mp', 'assets/img/hud_mp.png');
             this.game.load.image('spring', 'assets/tilesets/spring.png');
             this.game.load.image('summer', 'assets/tilesets/summer.png');
             this.game.load.image('autumn', 'assets/tilesets/autumn.png');
@@ -83,7 +85,7 @@ var Begin;
         update() {
             this.game.physics.arcade.overlap(this.hero, this, (hero, coin) => {
                 this.coinFx.play();
-                this.hud.augmenterScore();
+                this.hud.augmenterNbPieces();
                 coin.kill();
             });
         }
@@ -121,7 +123,7 @@ var Begin;
 var Begin;
 (function (Begin) {
     class Hero extends Phaser.Sprite {
-        constructor(game) {
+        constructor(game, hud) {
             if (Hero.x == null || Hero.y == null) {
                 let origine = Hero.getOrigineLvl(Hero.nomLvl);
                 Hero.x = origine[0];
@@ -132,6 +134,7 @@ var Begin;
             }
             super(game, Hero.x, Hero.y, 'hero', 0);
             this.game = game;
+            this.hud = hud;
             this.game.physics.arcade.enable(this);
             this.body.gravity.y = 1000;
             this.body.collideWorldBounds = true;
@@ -150,6 +153,10 @@ var Begin;
             this.tchSaut = Phaser.Keyboard.SPACEBAR;
             this.jumpFx = this.game.add.audio('jump', 1, false);
             this.game.add.existing(this);
+            Hero.hp = 6;
+            Hero.mp = 0;
+            this.hud.setHpBar();
+            this.hud.setMpBar();
         }
         update() {
             this.body.velocity.x = 0;
@@ -254,6 +261,8 @@ var Begin;
             return origine;
         }
     }
+    Hero.hpMax = 10;
+    Hero.mpMax = 10;
     Begin.Hero = Hero;
 })(Begin || (Begin = {}));
 var Begin;
@@ -263,12 +272,24 @@ var Begin;
             super(game);
             this.game = game;
             this.fixedToCamera = true;
-            this.bgHud = this.game.add.sprite(0, 0, 'hud', null, this);
-            this.scoreText = this.game.add.bitmapText(77, 2, 'retrofont', 'x ' + Begin.score, 12, this);
+            this.hudHp = this.game.add.sprite(2, 2, 'hud_hp', null, this);
+            this.hudHpWidth = this.hudHp.width;
+            this.hudMp = this.game.add.sprite(4, 9, 'hud_mp', null, this);
+            this.hudMpWidth = this.hudMp.width;
+            this.hudBg = this.game.add.sprite(0, 0, 'hud_bg', null, this);
+            this.scoreText = this.game.add.bitmapText(77, 2, 'retrofont', 'x ' + Begin.coins, 12, this);
         }
-        augmenterScore() {
-            Begin.score += 1;
-            this.scoreText.setText('x ' + Begin.score);
+        augmenterNbPieces() {
+            Begin.coins += 1;
+            this.scoreText.setText('x ' + Begin.coins);
+        }
+        setHpBar() {
+            let unHpBar = this.hudHpWidth / Begin.Hero.hpMax;
+            this.hudHp.width = unHpBar * Begin.Hero.hp;
+        }
+        setMpBar() {
+            let unMpBar = this.hudMpWidth / Begin.Hero.mpMax;
+            this.hudMp.width = unMpBar * Begin.Hero.mp;
         }
     }
     Begin.HUD = HUD;
@@ -302,10 +323,10 @@ var Begin;
             this.map.setCollisionBetween(0, 168, true, this.solids);
             this.behind.resizeWorld();
             this.solids.resizeWorld();
+            this.hud = new Begin.HUD(this.game);
             Begin.Hero.lvlDesign = this.game.cache.getJSON('lvldesign');
             Begin.Hero.nomLvl = this.nomLvl;
-            this.hero = new Begin.Hero(this.game);
-            this.hud = new Begin.HUD(this.game);
+            this.hero = new Begin.Hero(this.game, this.hud);
             this.coins = new Begin.Coins(this.game, this.map, this.hud, this.hero);
             this.front = this.map.createLayer('front');
         }
