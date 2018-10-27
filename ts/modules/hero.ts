@@ -12,6 +12,7 @@ module Begin {
         static x: number;
         static y: number;
         static sens: number;
+        
         static hpMax: number = 100;
         static hp: number;
         static mpMax: number = 100;

@@ -153,12 +153,10 @@ var Begin;
             this.tchSaut = Phaser.Keyboard.SPACEBAR;
             this.jumpFx = this.game.add.audio('jump', 1, false);
             this.game.add.existing(this);
-            Hero.hp = 33;
-            Hero.mp = 10;
-            this.hud.setHpBar();
-            this.hud.setMpBar();
         }
         update() {
+            this.hud.setHpBar();
+            this.hud.setMpBar();
             this.body.velocity.x = 0;
             if (this.tchDirection.left.isDown) {
                 this.body.velocity.x = -100;
@@ -329,6 +327,7 @@ var Begin;
             this.hero = new Begin.Hero(this.game, this.hud);
             this.coins = new Begin.Coins(this.game, this.map, this.hud, this.hero);
             this.front = this.map.createLayer('front');
+            this.game.world.bringToTop(this.hud);
         }
         update() {
             this.bg_1.tilePosition.x = -(this.game.camera.x * 0.5);

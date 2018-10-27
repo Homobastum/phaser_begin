@@ -90,6 +90,12 @@ module Begin {
             car doit être affiché devant lui
             */
             this.front = this.map.createLayer('front');
+
+            /********************************************
+             * Ajuster la profondeur des objets (axe z) * 
+             ********************************************/
+            // Mettre le hud au-dessus de l'ensemble des objets de la map
+            this.game.world.bringToTop(this.hud);
         }
 
         update() {
