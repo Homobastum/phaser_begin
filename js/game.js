@@ -153,8 +153,8 @@ var Begin;
             this.tchSaut = Phaser.Keyboard.SPACEBAR;
             this.jumpFx = this.game.add.audio('jump', 1, false);
             this.game.add.existing(this);
-            Hero.hp = 6;
-            Hero.mp = 0;
+            Hero.hp = 33;
+            Hero.mp = 10;
             this.hud.setHpBar();
             this.hud.setMpBar();
         }
@@ -261,8 +261,8 @@ var Begin;
             return origine;
         }
     }
-    Hero.hpMax = 10;
-    Hero.mpMax = 10;
+    Hero.hpMax = 100;
+    Hero.mpMax = 100;
     Begin.Hero = Hero;
 })(Begin || (Begin = {}));
 var Begin;

@@ -12,9 +12,9 @@ module Begin {
         static x: number;
         static y: number;
         static sens: number;
-        static hpMax: number = 10;
+        static hpMax: number = 100;
         static hp: number;
-        static mpMax: number = 10;
+        static mpMax: number = 100;
         static mp: number;
 
         constructor (game: Phaser.Game, hud: Begin.HUD) {
@@ -83,15 +83,15 @@ module Begin {
              * Création du héros dans le jeu *
              *********************************/
             this.game.add.existing(this);
-
-            Hero.hp = 6;
-            Hero.mp = 0;
-
-            this.hud.setHpBar();
-            this.hud.setMpBar();
         }
 
         update () {
+            /******************
+	         * Gestion du HUD *
+	         ******************/
+            this.hud.setHpBar();
+            this.hud.setMpBar();
+
             /***********************************
 	         * Gestion des contrôles du joueur *
 	         ***********************************/
