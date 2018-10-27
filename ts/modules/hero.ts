@@ -28,6 +28,14 @@ module Begin {
             if (Hero.sens == null) {
                 Hero.sens = 1;
             }
+
+            if (Hero.hp == null) {
+                Hero.hp = Hero.hpMax;
+            }
+
+            if (Hero.mp == null) {
+                Hero.mp = Hero.mpMax;
+            }
                 
             super(game, Hero.x, Hero.y, 'hero', 0);
             this.game = game;
