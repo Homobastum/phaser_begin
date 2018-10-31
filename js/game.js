@@ -1,6 +1,5 @@
 var Begin;
 (function (Begin) {
-    Begin.coins = 0;
     class Jeu extends Phaser.Game {
         constructor() {
             super(160, 144, Phaser.AUTO, '', null, false, false);
@@ -77,17 +76,38 @@ var Begin;
             this.map = map;
             this.hud = hud;
             this.hero = hero;
+            if (Coins.nb == null) {
+                Coins.nb = 0;
+                this.hud.setNbPieces();
+            }
             this.coinFx = this.game.add.audio('coin', 1, false);
             this.game.add.physicsGroup();
             this.map.createFromObjects('coins', 187, 'items', 17, true, false, this);
+            if (Coins.collected != null) {
+                this.forEach(this.deleteCollectedCoins, this);
+            }
             this.forEach(this.animate, this);
         }
         update() {
             this.game.physics.arcade.overlap(this.hero, this, (hero, coin) => {
                 this.coinFx.play();
-                this.hud.augmenterNbPieces();
+                Coins.nb += 1;
+                this.hud.setNbPieces();
+                this.saveCollectedCoins(coin);
                 coin.kill();
             });
+        }
+        saveCollectedCoins(coin) {
+            Coins.collected[Coins.nb - 1] = [coin.x, coin.y];
+        }
+        deleteCollectedCoins(coin) {
+            for (let noCoinToKill = 0; noCoinToKill < Coins.collected.length; noCoinToKill++) {
+                let coinToKillx = Coins.collected[noCoinToKill][0];
+                let coinToKilly = Coins.collected[noCoinToKill][1];
+                if (coinToKillx == coin.x && coinToKilly == coin.y) {
+                    coin.kill();
+                }
+            }
         }
         animate(coin) {
             coin.body.immovable = true;
@@ -95,6 +115,7 @@ var Begin;
             coin.animations.play('spin');
         }
     }
+    Coins.collected = [];
     Begin.Coins = Coins;
 })(Begin || (Begin = {}));
 var Begin;
@@ -281,11 +302,10 @@ var Begin;
             this.hudMp = this.game.add.sprite(4, 9, 'hud_mp', null, this);
             this.hudMpWidth = this.hudMp.width;
             this.hudBg = this.game.add.sprite(0, 0, 'hud_bg', null, this);
-            this.scoreText = this.game.add.bitmapText(77, 2, 'retrofont', 'x ' + Begin.coins, 12, this);
+            this.scoreText = this.game.add.bitmapText(77, 2, 'retrofont', 'x ' + Begin.Coins.nb, 12, this);
         }
-        augmenterNbPieces() {
-            Begin.coins += 1;
-            this.scoreText.setText('x ' + Begin.coins);
+        setNbPieces() {
+            this.scoreText.setText('x ' + Begin.Coins.nb);
         }
         setHpBar() {
             let unHpBar = this.hudHpWidth / Begin.Hero.hpMax;

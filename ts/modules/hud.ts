@@ -23,12 +23,11 @@ module Begin {
 
             this.hudBg = this.game.add.sprite(0, 0, 'hud_bg', null, this);
             
-            this.scoreText = this.game.add.bitmapText(77, 2, 'retrofont', 'x ' + Begin.coins, 12, this);
+            this.scoreText = this.game.add.bitmapText(77, 2, 'retrofont', 'x ' + Coins.nb, 12, this);
         }
 
-        augmenterNbPieces () {
-            Begin.coins += 1;
-            this.scoreText.setText('x ' + Begin.coins);
+        setNbPieces () {
+            this.scoreText.setText('x ' + Coins.nb);
         }
 
         setHpBar () {

@@ -1,9 +1,5 @@
 // Configuration générale du jeu
-module Begin {
-    // Déclaration et initialisation des variables globales du jeu
-    export let coins: number;
-    coins = 0;
-    
+module Begin {    
     // Paramètres du jeu
     export class Jeu extends Phaser.Game {
         constructor () {
