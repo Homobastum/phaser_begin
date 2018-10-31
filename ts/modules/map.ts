@@ -102,13 +102,13 @@ module Begin {
             /************************************
              * Gestion des parallax backgrounds *
              ************************************/
-            this.bg_1.tilePosition.x = -(this.game.camera.x * 0.5);
-            this.bg_2.tilePosition.x = -(this.game.camera.x * 0.7);
-            this.bg_3.tilePosition.x = -(this.game.camera.x * 0.9);
+            this.bg_1.tilePosition.x = -(this.game.camera.x * 0.2);
+            this.bg_2.tilePosition.x = -(this.game.camera.x * 0.5);
+            this.bg_3.tilePosition.x = -(this.game.camera.x * 0.8);
 
-            this.bg_1.tilePosition.y = -(this.game.camera.y * 0.5);
-            this.bg_2.tilePosition.y = -(this.game.camera.y * 0.7);
-            this.bg_3.tilePosition.y = -(this.game.camera.y * 0.9);
+            this.bg_1.tilePosition.y = -(this.game.camera.y * 0.2);
+            this.bg_2.tilePosition.y = -(this.game.camera.y * 0.5);
+            this.bg_3.tilePosition.y = -(this.game.camera.y * 0.8);
 
             /**************************
              * Gestion des collisions *

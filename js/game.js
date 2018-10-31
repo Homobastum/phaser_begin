@@ -83,9 +83,7 @@ var Begin;
             this.coinFx = this.game.add.audio('coin', 1, false);
             this.game.add.physicsGroup();
             this.map.createFromObjects('coins', 187, 'items', 17, true, false, this);
-            if (Coins.collected != null) {
-                this.forEach(this.deleteCollectedCoins, this);
-            }
+            this.forEach(this.deleteCollectedCoins, this);
             this.forEach(this.animate, this);
         }
         update() {
@@ -356,12 +354,12 @@ var Begin;
             this.game.world.bringToTop(this.hud);
         }
         update() {
-            this.bg_1.tilePosition.x = -(this.game.camera.x * 0.5);
-            this.bg_2.tilePosition.x = -(this.game.camera.x * 0.7);
-            this.bg_3.tilePosition.x = -(this.game.camera.x * 0.9);
-            this.bg_1.tilePosition.y = -(this.game.camera.y * 0.5);
-            this.bg_2.tilePosition.y = -(this.game.camera.y * 0.7);
-            this.bg_3.tilePosition.y = -(this.game.camera.y * 0.9);
+            this.bg_1.tilePosition.x = -(this.game.camera.x * 0.2);
+            this.bg_2.tilePosition.x = -(this.game.camera.x * 0.5);
+            this.bg_3.tilePosition.x = -(this.game.camera.x * 0.8);
+            this.bg_1.tilePosition.y = -(this.game.camera.y * 0.2);
+            this.bg_2.tilePosition.y = -(this.game.camera.y * 0.5);
+            this.bg_3.tilePosition.y = -(this.game.camera.y * 0.8);
             this.game.physics.arcade.collide(this.hero, this.solids);
         }
     }
