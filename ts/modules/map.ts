@@ -9,6 +9,7 @@ module Begin {
         hero: Begin.Hero;
         hud: Begin.HUD;
         coins: Begin.Coins;
+        pics: Begin.Pics;
 
         map: Phaser.Tilemap;
         bg_1: Phaser.TileSprite;
@@ -84,6 +85,9 @@ module Begin {
              ***********************/
             // Création des pièces collectables
             this.coins = new Coins(this.game, this.map, this.hud, this.hero);
+
+            // Création des pics
+            this.pics = new Pics(this.game, this.map, this.hud, this.hero);
 
             /* 
             Layer "Front" spécial qui doit être créé après le player

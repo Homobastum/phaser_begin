@@ -27,7 +27,7 @@ module Begin {
             // Ajouter le son de récupération d'une pièce
             this.coinFx = this.game.add.audio('coin', 1, false);
             
-            // Permettre à chaque d'avoir une physique afin d'être récupérée
+            // Permettre à chaque pièce d'avoir une physique afin d'être récupérée
             this.game.add.physicsGroup();
 
             /****************************************************

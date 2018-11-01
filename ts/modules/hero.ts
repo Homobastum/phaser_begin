@@ -6,6 +6,8 @@ module Begin {
         clavier: any;
         tchDirection: any;
         tchSaut: any;
+        invincible: boolean;
+        invincibleTimer: number;
         
         static nomLvl: string;        
         static lvlDesign: any;
@@ -13,9 +15,9 @@ module Begin {
         static y: number;
         static sens: number;
         
-        static hpMax: number = 100;
+        static hpMax: number = 10;
         static hp: number;
-        static mpMax: number = 100;
+        static mpMax: number = 10;
         static mp: number;
 
         constructor (game: Phaser.Game, hud: Begin.HUD) {
@@ -40,6 +42,8 @@ module Begin {
             super(game, Hero.x, Hero.y, 'hero', 0);
             this.game = game;
             this.hud = hud;
+            this.invincible = false;
+            this.invincibleTimer = 0;
 
             /*****************************************
              * Configuration de la physique du héros *
@@ -139,6 +143,11 @@ module Begin {
 
             // Actions à effectuer lorsque le player atteint les limites de la map
             this.sortDeLaMap(Hero.nomLvl);
+
+            /****************************************
+	         * Gestion de l'invincibilité du joueur *
+	         ****************************************/
+            this.setInvincibility();
         }
 
         sortDeLaMap (nomLvl: string) {
@@ -235,6 +244,22 @@ module Begin {
             }
 
             return origine;
+        }
+
+        setInvincibility () {
+            if (this.invincible) {
+                /* 
+                On incrémente à chaque update, 
+                ce qui correspond à une frame car la méthode update() est appelée toutes les frames
+                */
+                this.invincibleTimer += 1;
+                
+                // Si le timer d'invincibilité est supérieur ou égal à 180 frames (3 secondes en 60fps)
+                if (this.invincibleTimer >= 180) {
+                    this.invincible = false; // Plus d'invincibilité
+                    this.invincibleTimer = 0; // On réinitialise le timer d'invincibilité
+                }
+            }
         }
     }
 }

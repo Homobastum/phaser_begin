@@ -39,6 +39,7 @@ module Begin {
 
             // Chargement des sons
             this.load.audio('coin', 'assets/sounds/coin.mp3', true);
+            this.load.audio('trap_hurting', 'assets/sounds/trap_hurting.wav', true);
             this.load.audio('jump', 'assets/sounds/jump.mp3', true);
 
             // Chargement des images

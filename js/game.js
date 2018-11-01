@@ -33,6 +33,7 @@ var Begin;
         preload() {
             this.game.load.bitmapFont('retrofont', 'assets/fonts/retrofont.png', 'assets/fonts/retrofont.xml');
             this.load.audio('coin', 'assets/sounds/coin.mp3', true);
+            this.load.audio('trap_hurting', 'assets/sounds/trap_hurting.wav', true);
             this.load.audio('jump', 'assets/sounds/jump.mp3', true);
             this.game.load.image('logo', 'assets/img/logo.png');
             this.game.load.image('title_screen', 'assets/img/title_screen.png');
@@ -160,6 +161,8 @@ var Begin;
             super(game, Hero.x, Hero.y, 'hero', 0);
             this.game = game;
             this.hud = hud;
+            this.invincible = false;
+            this.invincibleTimer = 0;
             this.game.physics.arcade.enable(this);
             this.body.gravity.y = 1000;
             this.body.collideWorldBounds = true;
@@ -206,6 +209,7 @@ var Begin;
                 this.animations.play('fall');
             }
             this.sortDeLaMap(Hero.nomLvl);
+            this.setInvincibility();
         }
         sortDeLaMap(nomLvl) {
             for (let level_key in Hero.lvlDesign) {
@@ -283,9 +287,18 @@ var Begin;
             }
             return origine;
         }
+        setInvincibility() {
+            if (this.invincible) {
+                this.invincibleTimer += 1;
+                if (this.invincibleTimer >= 180) {
+                    this.invincible = false;
+                    this.invincibleTimer = 0;
+                }
+            }
+        }
     }
-    Hero.hpMax = 100;
-    Hero.mpMax = 100;
+    Hero.hpMax = 10;
+    Hero.mpMax = 10;
     Begin.Hero = Hero;
 })(Begin || (Begin = {}));
 var Begin;
@@ -350,6 +363,7 @@ var Begin;
             Begin.Hero.nomLvl = this.nomLvl;
             this.hero = new Begin.Hero(this.game, this.hud);
             this.coins = new Begin.Coins(this.game, this.map, this.hud, this.hero);
+            this.pics = new Begin.Pics(this.game, this.map, this.hud, this.hero);
             this.front = this.map.createLayer('front');
             this.game.world.bringToTop(this.hud);
         }
@@ -395,5 +409,36 @@ var Begin;
         }
     }
     Begin.Map2 = Map2;
+})(Begin || (Begin = {}));
+var Begin;
+(function (Begin) {
+    class Pics extends Phaser.Group {
+        constructor(game, map, hud, hero) {
+            super(game);
+            this.enableBody = true;
+            this.game = game;
+            this.map = map;
+            this.hud = hud;
+            this.hero = hero;
+            this.degats = 1;
+            this.trapFx = this.game.add.audio('trap_hurting', 1, false);
+            this.game.add.physicsGroup();
+            this.map.createFromObjects('pics', 181, 'items', 11, true, false, this);
+        }
+        update() {
+            this.game.physics.arcade.overlap(this.hero, this, (hero, pic) => {
+                if (!this.hero.invincible) {
+                    this.trapFx.play();
+                    this.setDegats();
+                    this.hero.invincible = true;
+                }
+            });
+        }
+        setDegats() {
+            Begin.Hero.hp -= this.degats;
+            this.hud.setHpBar();
+        }
+    }
+    Begin.Pics = Pics;
 })(Begin || (Begin = {}));
 //# sourceMappingURL=game.js.map

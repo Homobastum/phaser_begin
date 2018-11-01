@@ -93,6 +93,40 @@
          "y":0
         }, 
         {
+         "draworder":"topdown",
+         "name":"pics",
+         "objects":[
+                {
+                 "gid":181,
+                 "height":16,
+                 "id":76,
+                 "name":"pic",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":48,
+                 "y":128
+                }, 
+                {
+                 "gid":181,
+                 "height":16,
+                 "id":78,
+                 "name":"pic",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":96,
+                 "y":128
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
          "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 1, 2, 0, 0, 1, 2, 1, 2, 14, 15, 14, 15, 0, 0, 14, 15, 14, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
          "height":9,
          "name":"front",
@@ -103,7 +137,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":76,
+ "nextobjectid":80,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.6",
