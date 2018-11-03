@@ -55,7 +55,7 @@ var Begin;
             this.game.load.tilemap('map2', 'assets/maps/map2.json', null, Phaser.Tilemap.TILED_JSON);
         }
         create() {
-            this.changeState('Map1');
+            this.changeState('Map2');
             this.logo = this.add.sprite(this.world.centerX, this.world.centerY, 'logo');
             this.logo.anchor.setTo(0.5, 0.5);
             this.logo.scale.setTo(1, 1);
@@ -162,7 +162,6 @@ var Begin;
             this.game = game;
             this.hud = hud;
             this.invincible = false;
-            this.invincibleTimer = 0;
             this.game.physics.arcade.enable(this);
             this.body.gravity.y = 1000;
             this.body.collideWorldBounds = true;
@@ -209,7 +208,8 @@ var Begin;
                 this.animations.play('fall');
             }
             this.sortDeLaMap(Hero.nomLvl);
-            this.setInvincibility();
+            this.checkHp();
+            this.checkMp();
         }
         sortDeLaMap(nomLvl) {
             for (let level_key in Hero.lvlDesign) {
@@ -245,6 +245,7 @@ var Begin;
         }
         meurt() {
             this.seTeleporte(Hero.nomLvl);
+            Hero.hp = Hero.hpMax;
         }
         seTeleporte(nomLvl, coordonnees = null) {
             this.game.state.start(nomLvl);
@@ -288,12 +289,38 @@ var Begin;
             return origine;
         }
         setInvincibility() {
-            if (this.invincible) {
-                this.invincibleTimer += 1;
-                if (this.invincibleTimer >= 180) {
-                    this.invincible = false;
-                    this.invincibleTimer = 0;
-                }
+            this.invincible = true;
+            this.flasher(250, 100, 3000);
+            this.game.time.events.add(3000, () => {
+                this.invincible = false;
+            }, this);
+        }
+        flasher(every, duration, time) {
+            let flasher = this.game.time.events.loop(every, () => {
+                this.alpha = 0;
+                this.game.time.events.add(duration, () => {
+                    this.alpha = 1;
+                }, self);
+            }, this);
+            this.game.time.events.add(time, () => {
+                this.game.time.events.remove(flasher);
+                this.alpha = 1;
+            }, this);
+        }
+        checkHp() {
+            if (Hero.hp <= 0) {
+                this.meurt();
+            }
+            if (Hero.hp >= Hero.hpMax) {
+                Hero.hp = Hero.hpMax;
+            }
+        }
+        checkMp() {
+            if (Hero.mp <= 0) {
+                Hero.mp = 0;
+            }
+            if (Hero.mp >= Hero.mpMax) {
+                Hero.mp = Hero.mpMax;
             }
         }
     }
@@ -354,6 +381,7 @@ var Begin;
             this.bg_3.fixedToCamera = true;
             this.behind = this.map.createLayer('behind');
             this.solids = this.map.createLayer('solids');
+            this.front = this.map.createLayer('front');
             this.game.world.setBounds(160, 144, 624, 144);
             this.map.setCollisionBetween(0, 168, true, this.solids);
             this.behind.resizeWorld();
@@ -362,9 +390,10 @@ var Begin;
             Begin.Hero.lvlDesign = this.game.cache.getJSON('lvldesign');
             Begin.Hero.nomLvl = this.nomLvl;
             this.hero = new Begin.Hero(this.game, this.hud);
-            this.coins = new Begin.Coins(this.game, this.map, this.hud, this.hero);
-            this.pics = new Begin.Pics(this.game, this.map, this.hud, this.hero);
-            this.front = this.map.createLayer('front');
+            this.coins = this.groupeObjetsExiste('coins') ? new Begin.Coins(this.game, this.map, this.hud, this.hero) : null;
+            this.pics = this.groupeObjetsExiste('pics') ? new Begin.Pics(this.game, this.map, this.hud, this.hero) : null;
+            this.game.world.bringToTop(this.hero);
+            this.game.world.bringToTop(this.front);
             this.game.world.bringToTop(this.hud);
         }
         update() {
@@ -375,6 +404,14 @@ var Begin;
             this.bg_2.tilePosition.y = -(this.game.camera.y * 0.5);
             this.bg_3.tilePosition.y = -(this.game.camera.y * 0.8);
             this.game.physics.arcade.collide(this.hero, this.solids);
+        }
+        groupeObjetsExiste(nomGroupe) {
+            for (let object in this.map.objects) {
+                if (object == nomGroupe) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
     Begin.Map = Map;
@@ -430,7 +467,7 @@ var Begin;
                 if (!this.hero.invincible) {
                     this.trapFx.play();
                     this.setDegats();
-                    this.hero.invincible = true;
+                    this.hero.setInvincibility();
                 }
             });
         }

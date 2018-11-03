@@ -71,7 +71,7 @@ module Begin {
 
         create () {
             // Fast debug (à supprimer lorsque le développement du jeu sera terminé)
-            this.changeState('Map1');
+            this.changeState('Map2');
             
             // Afficher le splash screen "HB Lab"
             this.logo = this.add.sprite(this.world.centerX, this.world.centerY, 'logo');

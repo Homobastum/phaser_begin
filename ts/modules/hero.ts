@@ -7,7 +7,6 @@ module Begin {
         tchDirection: any;
         tchSaut: any;
         invincible: boolean;
-        invincibleTimer: number;
         
         static nomLvl: string;        
         static lvlDesign: any;
@@ -43,7 +42,6 @@ module Begin {
             this.game = game;
             this.hud = hud;
             this.invincible = false;
-            this.invincibleTimer = 0;
 
             /*****************************************
              * Configuration de la physique du héros *
@@ -147,7 +145,13 @@ module Begin {
             /****************************************
 	         * Gestion de l'invincibilité du joueur *
 	         ****************************************/
-            this.setInvincibility();
+            // this.setInvincibility();
+            
+            /**************************************
+	         * Gestion des statistiques du joueur *
+	         **************************************/
+            this.checkHp();
+            this.checkMp();
         }
 
         sortDeLaMap (nomLvl: string) {
@@ -195,6 +199,7 @@ module Begin {
 
         meurt () {
             this.seTeleporte(Hero.nomLvl);
+            Hero.hp = Hero.hpMax;
         }
 
         seTeleporte (nomLvl: string, coordonnees: number[] = null) {
@@ -247,18 +252,45 @@ module Begin {
         }
 
         setInvincibility () {
-            if (this.invincible) {
-                /* 
-                On incrémente à chaque update, 
-                ce qui correspond à une frame car la méthode update() est appelée toutes les frames
-                */
-                this.invincibleTimer += 1;
-                
-                // Si le timer d'invincibilité est supérieur ou égal à 180 frames (3 secondes en 60fps)
-                if (this.invincibleTimer >= 180) {
-                    this.invincible = false; // Plus d'invincibilité
-                    this.invincibleTimer = 0; // On réinitialise le timer d'invincibilité
-                }
+            this.invincible = true;
+            this.flasher(250, 100, 3000);
+            
+            this.game.time.events.add(3000, () => {
+                this.invincible = false;
+            }, this);
+        }
+
+        flasher (every: number, duration: number, time: number) { 
+            let flasher = this.game.time.events.loop(every, () => {
+                this.alpha = 0;
+                this.game.time.events.add(duration, () => {
+                    this.alpha = 1;
+                }, self);
+            }, this); 
+
+            this.game.time.events.add(time, () => {
+                this.game.time.events.remove(flasher);
+                this.alpha = 1;
+            }, this);  
+        }
+
+        checkHp () {
+            if (Hero.hp <= 0) {
+                this.meurt();
+            }
+
+            if (Hero.hp >= Hero.hpMax) {
+                Hero.hp = Hero.hpMax;
+            }
+        }
+
+        checkMp () {
+            if (Hero.mp <= 0) {
+                Hero.mp = 0;
+            }
+
+            if (Hero.mp >= Hero.mpMax) {
+                Hero.mp = Hero.mpMax;
             }
         }
     }

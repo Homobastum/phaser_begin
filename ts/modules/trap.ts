@@ -53,7 +53,7 @@ module Begin {
                     this.setDegats();
                     
                     // - rendre le joueur invincible
-                    this.hero.invincible = true;
+                    this.hero.setInvincibility();
                 }
             });
         }

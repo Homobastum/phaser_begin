@@ -59,6 +59,7 @@ module Begin {
             // this.background = this.map.createLayer('background');
             this.behind = this.map.createLayer('behind');
             this.solids = this.map.createLayer('solids');
+            this.front = this.map.createLayer('front');
 
             // Ajuster les collisions de la map
             this.game.world.setBounds(160, 144, 624, 144);
@@ -84,21 +85,27 @@ module Begin {
              * Création des objets *
              ***********************/
             // Création des pièces collectables
-            this.coins = new Coins(this.game, this.map, this.hud, this.hero);
+            this.coins = this.groupeObjetsExiste('coins') ? new Coins(this.game, this.map, this.hud, this.hero) : null;
 
             // Création des pics
-            this.pics = new Pics(this.game, this.map, this.hud, this.hero);
-
-            /* 
-            Layer "Front" spécial qui doit être créé après le player
-            car doit être affiché devant lui
-            */
-            this.front = this.map.createLayer('front');
+            this.pics = this.groupeObjetsExiste('pics') ? new Pics(this.game, this.map, this.hud, this.hero) : null;
 
             /********************************************
              * Ajuster la profondeur des objets (axe z) * 
              ********************************************/
-            // Mettre le hud au-dessus de l'ensemble des objets de la map
+            /* 
+            Placer le HUD au-dessus de l'ensemble des objets de la map,
+            sauf le layer front et le HUD
+            */
+            this.game.world.bringToTop(this.hero);
+
+            /* 
+            Placer le HUD au-dessus de l'ensemble des objets de la map,
+            sauf le HUD
+            */
+            this.game.world.bringToTop(this.front);
+
+            // Placer le HUD au-dessus de l'ensemble des objets de la map
             this.game.world.bringToTop(this.hud);
         }
 
@@ -119,6 +126,17 @@ module Begin {
              **************************/
             // Gestion de la collision entre le joueur et le calque des solides
             this.game.physics.arcade.collide(this.hero, this.solids);
+        }
+
+        groupeObjetsExiste (nomGroupe: string) {
+            // Vérifier que les groupes d'objets existent bien sur la map courante avant de les créer
+            for (let object in this.map.objects) {
+                if (object == nomGroupe) {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

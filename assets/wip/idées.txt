@@ -1,0 +1,21 @@
+Statistiques:
+- Santé
+	- incidence sur le nb de pv max
+- Magie
+	- incidence sur le nb de mp max
+- Atq Phy
+	- incidence sur les coups physiques
+- Def Phy
+	- incidence les dégâts physiques
+- Vitesse Phy
+	- incidence sur la vitesse des coups physiques
+- Atq Mgq
+	- incidence sur les coups magiques
+- Def Mgq
+	- incidence sur les dégâts magiques 
+- Vitesse Mgq
+	- incidence sur la vitesse des coups magiques 
+- Vitalité
+	- incidence sur la récupération des pv après KO
+- Energie
+	- incidence sur la récupération des mp après KO
