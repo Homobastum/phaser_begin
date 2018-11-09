@@ -15,12 +15,16 @@ module Begin {
         update () {
             this.map.update();
         }
+
+        render () {
+            this.map.render();
+        }
     }
 
     export class Map2 extends Phaser.State {
         map: Begin.Map;
 
-        create() {
+        create () {
             let nomLevel = 'Map2';
             let tilemap = 'map2';
             let tileset = ['spring', 'spring'];
@@ -30,7 +34,7 @@ module Begin {
             this.map.create();
         }
 
-        update() {
+        update () {
             this.map.update();
         }
     }

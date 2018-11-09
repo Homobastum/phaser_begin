@@ -1,4 +1,10 @@
-Statistiques:
+But:
+- Sauver la princesse
+
+Game Design;=:
+- Système jour / nuit ?
+
+Statistiques joueur:
 - Santé
 	- incidence sur le nb de pv max
 - Magie
@@ -6,7 +12,7 @@ Statistiques:
 - Atq Phy
 	- incidence sur les coups physiques
 - Def Phy
-	- incidence les dégâts physiques
+	- incidence sur les dégâts physiques
 - Vitesse Phy
 	- incidence sur la vitesse des coups physiques
 - Atq Mgq
@@ -19,3 +25,40 @@ Statistiques:
 	- incidence sur la récupération des pv après KO
 - Energie
 	- incidence sur la récupération des mp après KO
+
+Statistiques ennemis dont BOSS:
+- Santé
+	- incidence sur le nb de pv max
+- Atq Phy
+	- incidence sur les coups physiques
+- Def Phy
+	- incidence sur les dégâts physiques
+- Atq Mgq
+	- incidence sur les coups magiques
+- Def Mgq
+	- incidence sur les dégâts magiques
+- Vitesse
+	- incidence sur la vitesse de déplacement 
+
+Augmentation des statistiques:
+- 5 orbes divines à récupérer sur la map
+- 10 points d'augmentations max pour une stat
+- 1 orbe correspond à 10 points d'augmentations (pour toutes les stats, au joueur de choisir)
+
+BOSS:
+- Dragon
+- 3 patterns:
+	- 1:
+		- move: statique / atq mgq: boule de feu / atq phy: coup de patte
+	- 2
+		- move:
+			- vole puis se pose pour aller de part et d'autre de la map alternativement
+			- se soigne lorsqu'il est posé avec une bulle de protection
+			- si la bulle de protection est détruite => il est sonné quelques secondes puis vol de l'autre côté de la map
+		- atq mgq: plusieurs boules de feu arrivent du haut lorsqu'il survole l'ensemble de la largeur de la map
+		- atq phy: N/A
+	- 3	- le dragon devient fou et se retire dans la tour qui possède des plateformes pour grimper et descendre, il prend lui-même les décisions: voler, cracher du feu, se poser et se soigner (avec double bulle de protection) 
+
+NEW GAME+:
+- Redémarrer le jeu avec les 5 orbes afin de redistribuer les points
+- Ennemis plus forts dont BOSS (attaque, défense et vitesse et plus difficile à tuer) 

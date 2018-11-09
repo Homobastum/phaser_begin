@@ -33,7 +33,7 @@ var Begin;
         preload() {
             this.game.load.bitmapFont('retrofont', 'assets/fonts/retrofont.png', 'assets/fonts/retrofont.xml');
             this.load.audio('coin', 'assets/sounds/coin.mp3', true);
-            this.load.audio('trap_hurting', 'assets/sounds/trap_hurting.wav', true);
+            this.load.audio('hurt', 'assets/sounds/hurt.wav', true);
             this.load.audio('jump', 'assets/sounds/jump.mp3', true);
             this.game.load.image('logo', 'assets/img/logo.png');
             this.game.load.image('title_screen', 'assets/img/title_screen.png');
@@ -55,7 +55,7 @@ var Begin;
             this.game.load.tilemap('map2', 'assets/maps/map2.json', null, Phaser.Tilemap.TILED_JSON);
         }
         create() {
-            this.changeState('Map2');
+            this.changeState('Map1');
             this.logo = this.add.sprite(this.world.centerX, this.world.centerY, 'logo');
             this.logo.anchor.setTo(0.5, 0.5);
             this.logo.scale.setTo(1, 1);
@@ -162,52 +162,64 @@ var Begin;
             this.game = game;
             this.hud = hud;
             this.invincible = false;
+            this.xTerreFerme = Hero.x;
+            this.yTerreFerme = Hero.y;
+            this.pause = false;
+            this.anchor.setTo(0.5, 0.5);
             this.game.physics.arcade.enable(this);
             this.body.gravity.y = 1000;
+            this.body.setSize(10, 16, 4);
             this.body.collideWorldBounds = true;
             this.setCollisionWithLevelLimits();
-            this.anchor.setTo(0.5, 0.5);
             this.game.camera.follow(this);
-            for (var noFrame = 1; noFrame <= 7; noFrame++) {
-            }
-            this.animations.add('stand', [0, 1, 2, 3], 5, true);
-            this.animations.add('run', [5, 6, 7], 10, true);
-            this.animations.add('jump', [8], 10, true);
-            this.animations.add('fall', [9], 10, true);
+            this.standAnimation = this.animations.add('stand', [0, 1, 2, 3], 5, true);
+            this.runAnimation = this.animations.add('run', [5, 6, 7], 10, true);
+            this.jumpAnimation = this.animations.add('jump', [8], 10, true);
+            this.fallAnimation = this.animations.add('fall', [9], 10, true);
             this.scale.x = Hero.sens;
             this.clavier = this.game.input.keyboard;
             this.tchDirection = this.game.input.keyboard.createCursorKeys();
             this.tchSaut = Phaser.Keyboard.SPACEBAR;
             this.jumpFx = this.game.add.audio('jump', 1, false);
+            this.hurtFx = this.game.add.audio('hurt', 1, false);
             this.game.add.existing(this);
         }
         update() {
+            Hero.xPos = Math.round(this.body.x);
+            Hero.yPos = Math.round(this.body.y);
             this.hud.setHpBar();
             this.hud.setMpBar();
             this.body.velocity.x = 0;
-            if (this.tchDirection.left.isDown) {
-                this.body.velocity.x = -100;
-                Hero.sens = this.scale.x = -1;
-                this.body.blocked.down ? this.animations.play('run') : false;
-            }
-            else if (this.tchDirection.right.isDown) {
-                this.body.velocity.x = 100;
-                Hero.sens = this.scale.x = 1;
-                this.body.blocked.down ? this.animations.play('run') : false;
+            if (!this.pause) {
+                if (this.tchDirection.left.isDown) {
+                    this.body.velocity.x = -100;
+                    Hero.sens = this.scale.x = -1;
+                    this.body.blocked.down ? this.animations.play('run') : false;
+                }
+                else if (this.tchDirection.right.isDown) {
+                    this.body.velocity.x = 100;
+                    Hero.sens = this.scale.x = 1;
+                    this.body.blocked.down ? this.animations.play('run') : false;
+                }
+                else {
+                    this.body.blocked.down ? this.animations.play('stand') : false;
+                }
+                if (this.game.input.keyboard.downDuration(this.tchSaut) && this.body.blocked.down
+                    || this.tchDirection.up.downDuration() && this.body.blocked.down) {
+                    this.isJumping = true;
+                    this.body.velocity.y = -300;
+                    this.animations.play('jump');
+                    this.jumpFx.play();
+                }
             }
             else {
                 this.body.blocked.down ? this.animations.play('stand') : false;
-            }
-            if (this.game.input.keyboard.downDuration(this.tchSaut) && this.body.blocked.down
-                || this.tchDirection.up.downDuration() && this.body.blocked.down) {
-                this.body.velocity.y = -300;
-                this.animations.play('jump');
-                this.jumpFx.play();
             }
             if (!this.body.blocked.down && this.body.velocity.y > 0) {
                 this.animations.play('fall');
             }
             this.sortDeLaMap(Hero.nomLvl);
+            this.checkTerreFerme();
             this.checkHp();
             this.checkMp();
         }
@@ -236,24 +248,43 @@ var Begin;
         }
         consequences(level, level_limit) {
             if (level_limit.dead) {
-                this.meurt();
+                this.tombeDansUnTrou();
             }
             if (level_limit.map) {
                 let coordonnees = [level_limit.player_x + level.position_adjustement, level_limit.player_y + level.position_adjustement];
                 this.seTeleporte(level_limit.map, coordonnees);
             }
         }
+        checkTerreFerme() {
+            if (this.body.blocked.down) {
+                this.xTerreFerme = this.x;
+                this.yTerreFerme = this.body.y;
+            }
+        }
+        tombeDansUnTrou() {
+            this.pause = true;
+            this.setDegats(0.5);
+            let refreshMap = Hero.hp <= 0;
+            let coordonnees = refreshMap ? null : [this.xTerreFerme, this.yTerreFerme];
+            this.seTeleporte(Hero.nomLvl, coordonnees, refreshMap);
+        }
         meurt() {
             this.seTeleporte(Hero.nomLvl);
             Hero.hp = Hero.hpMax;
         }
-        seTeleporte(nomLvl, coordonnees = null) {
-            this.game.state.start(nomLvl);
+        seTeleporte(nomLvl = null, coordonnees = null, refreshMap = true) {
             if (coordonnees == null) {
                 coordonnees = Hero.getOrigineLvl(nomLvl);
             }
-            Hero.x = coordonnees[0];
-            Hero.y = coordonnees[1];
+            if (refreshMap) {
+                Hero.y = coordonnees[1];
+                Hero.x = coordonnees[0];
+                this.game.state.start(nomLvl);
+            }
+            else {
+                this.x = Math.round(coordonnees[0]);
+                this.y = Math.round(coordonnees[1]);
+            }
         }
         setCollisionWithLevelLimits() {
             for (let level_key in Hero.lvlDesign) {
@@ -293,6 +324,7 @@ var Begin;
             this.flasher(250, 100, 3000);
             this.game.time.events.add(3000, () => {
                 this.invincible = false;
+                this.pause = false;
             }, this);
         }
         flasher(every, duration, time) {
@@ -323,6 +355,11 @@ var Begin;
                 Hero.mp = Hero.mpMax;
             }
         }
+        setDegats(degats) {
+            this.hurtFx.play();
+            Hero.hp -= degats;
+            this.setInvincibility();
+        }
     }
     Hero.hpMax = 10;
     Hero.mpMax = 10;
@@ -341,6 +378,12 @@ var Begin;
             this.hudMpWidth = this.hudMp.width;
             this.hudBg = this.game.add.sprite(0, 0, 'hud_bg', null, this);
             this.scoreText = this.game.add.bitmapText(77, 2, 'retrofont', 'x ' + Begin.Coins.nb, 12, this);
+            this.playerX = this.game.add.bitmapText(110, 2, 'retrofont', 'X: ' + Math.round(Begin.Hero.xPos), 12, this);
+            this.playerY = this.game.add.bitmapText(110, 14, 'retrofont', 'Y: ' + Begin.Hero.yPos, 12, this);
+        }
+        update() {
+            this.playerX.setText('X: ' + Begin.Hero.xPos);
+            this.playerY.setText('Y: ' + Begin.Hero.yPos);
         }
         setNbPieces() {
             this.scoreText.setText('x ' + Begin.Coins.nb);
@@ -383,7 +426,7 @@ var Begin;
             this.solids = this.map.createLayer('solids');
             this.front = this.map.createLayer('front');
             this.game.world.setBounds(160, 144, 624, 144);
-            this.map.setCollisionBetween(0, 168, true, this.solids);
+            this.map.setCollisionBetween(0, 168, true, this.solids, true);
             this.behind.resizeWorld();
             this.solids.resizeWorld();
             this.hud = new Begin.HUD(this.game);
@@ -403,7 +446,7 @@ var Begin;
             this.bg_1.tilePosition.y = -(this.game.camera.y * 0.2);
             this.bg_2.tilePosition.y = -(this.game.camera.y * 0.5);
             this.bg_3.tilePosition.y = -(this.game.camera.y * 0.8);
-            this.game.physics.arcade.collide(this.hero, this.solids);
+            this.game.physics.arcade.collide(this.hero, this.solids, null, null, this);
         }
         groupeObjetsExiste(nomGroupe) {
             for (let object in this.map.objects) {
@@ -412,6 +455,9 @@ var Begin;
                 }
             }
             return false;
+        }
+        render() {
+            this.game.debug.body(this.hero);
         }
     }
     Begin.Map = Map;
@@ -429,6 +475,9 @@ var Begin;
         }
         update() {
             this.map.update();
+        }
+        render() {
+            this.map.render();
         }
     }
     Begin.Map1 = Map1;
@@ -458,22 +507,15 @@ var Begin;
             this.hud = hud;
             this.hero = hero;
             this.degats = 1;
-            this.trapFx = this.game.add.audio('trap_hurting', 1, false);
             this.game.add.physicsGroup();
             this.map.createFromObjects('pics', 181, 'items', 11, true, false, this);
         }
         update() {
             this.game.physics.arcade.overlap(this.hero, this, (hero, pic) => {
                 if (!this.hero.invincible) {
-                    this.trapFx.play();
-                    this.setDegats();
-                    this.hero.setInvincibility();
+                    this.hero.setDegats(this.degats);
                 }
             });
-        }
-        setDegats() {
-            Begin.Hero.hp -= this.degats;
-            this.hud.setHpBar();
         }
     }
     Begin.Pics = Pics;

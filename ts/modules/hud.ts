@@ -8,6 +8,8 @@ module Begin {
         hudMp: Phaser.Sprite;
         hudMpWidth: number;
         scoreText: Phaser.BitmapText;
+        playerX: Phaser.BitmapText;
+        playerY: Phaser.BitmapText;
 
         constructor (game: Phaser.Game) {
             super(game);
@@ -24,6 +26,14 @@ module Begin {
             this.hudBg = this.game.add.sprite(0, 0, 'hud_bg', null, this);
             
             this.scoreText = this.game.add.bitmapText(77, 2, 'retrofont', 'x ' + Coins.nb, 12, this);
+
+            this.playerX = this.game.add.bitmapText(110, 2, 'retrofont', 'X: ' + Math.round(Hero.xPos), 12, this);
+            this.playerY = this.game.add.bitmapText(110, 14, 'retrofont', 'Y: ' + Hero.yPos, 12, this);
+        }
+
+        update () {
+            this.playerX.setText('X: ' + Hero.xPos);
+            this.playerY.setText('Y: ' + Hero.yPos);
         }
 
         setNbPieces () {

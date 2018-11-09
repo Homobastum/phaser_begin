@@ -3,15 +3,26 @@ module Begin {
         game: Phaser.Game;
         hud: Begin.HUD;
         jumpFx: Phaser.Sound;
+        isJumping: boolean;
         clavier: any;
         tchDirection: any;
         tchSaut: any;
         invincible: boolean;
+        xTerreFerme: number;
+        yTerreFerme: number;
+        hurtFx: Phaser.Sound;
+        pause: boolean;
+        standAnimation: Phaser.Animation;
+        runAnimation: Phaser.Animation;
+        jumpAnimation: Phaser.Animation;
+        fallAnimation: Phaser.Animation;
         
         static nomLvl: string;        
         static lvlDesign: any;
         static x: number;
         static y: number;
+        static xPos: number;
+        static yPos: number;
         static sens: number;
         
         static hpMax: number = 10;
@@ -37,42 +48,41 @@ module Begin {
             if (Hero.mp == null) {
                 Hero.mp = Hero.mpMax;
             }
-                
+            
             super(game, Hero.x, Hero.y, 'hero', 0);
             this.game = game;
             this.hud = hud;
             this.invincible = false;
+            this.xTerreFerme = Hero.x;
+            this.yTerreFerme = Hero.y;
+            this.pause = false;
 
             /*****************************************
              * Configuration de la physique du héros *
              *****************************************/
+            // Bien positionner l'ancre au milieu du sprite du joueur
+            this.anchor.setTo(0.5, 0.5);
+
             // Ajout de la physique du héros 
             this.game.physics.arcade.enable(this);
             this.body.gravity.y = 1000;
+            this.body.setSize(10, 16, 4);
 
             // Empêcher le héros de sortir des limites du terrain de jeu
             this.body.collideWorldBounds = true;
             this.setCollisionWithLevelLimits();
-            
-            // Bien positionner l'ancre au milieu du sprite du joueur
-            this.anchor.setTo(0.5, 0.5);
 
             // La caméra suit toujours l'ancre du sprite du joueur
             this.game.camera.follow(this);
-
-            // Ajuster le masque de collision pour chaque frames du spritesheet de "player"
-            for (var noFrame = 1; noFrame <= 7; noFrame++) {
-                // this.body.setSize(14, 16, 2);
-            }
 
             /************************************
              * Création des animations du héros *
              ************************************/
             // Gestion des animations d'action du joueur
-            this.animations.add('stand', [0, 1, 2, 3], 5, true);
-            this.animations.add('run', [5, 6, 7], 10, true);
-            this.animations.add('jump', [8], 10, true);
-            this.animations.add('fall', [9], 10, true);
+            this.standAnimation = this.animations.add('stand', [0, 1, 2, 3], 5, true);
+            this.runAnimation = this.animations.add('run', [5, 6, 7], 10, true);
+            this.jumpAnimation = this.animations.add('jump', [8], 10, true);
+            this.fallAnimation = this.animations.add('fall', [9], 10, true);
 
             // Sens du sprite (gauche ou droite) vers lequel le player regarde
             this.scale.x = Hero.sens;
@@ -90,6 +100,9 @@ module Begin {
             // Saut
             this.jumpFx = this.game.add.audio('jump', 1, false);
 
+            // Blessure
+            this.hurtFx = this.game.add.audio('hurt', 1, false);
+
             /*********************************
              * Création du héros dans le jeu *
              *********************************/
@@ -97,6 +110,12 @@ module Begin {
         }
 
         update () {
+            /********************
+	         * Gestion du debug *
+	         ********************/
+            Hero.xPos = Math.round(this.body.x);
+            Hero.yPos = Math.round(this.body.y);
+            
             /******************
 	         * Gestion du HUD *
 	         ******************/
@@ -108,44 +127,52 @@ module Begin {
 	         ***********************************/
             // RàZ du mouvement de vélocité du joueur
             this.body.velocity.x = 0;
-
-            // Direction
-            if (this.tchDirection.left.isDown) {
-                // Aller à gauche
+            
+            if (!this.pause) {
+                // Direction
+                if (this.tchDirection.left.isDown) {
+                    // Aller à gauche
                 this.body.velocity.x = -100;
                 Hero.sens = this.scale.x = -1; // Pour tourner le sprite vers la gauche
                 this.body.blocked.down ? this.animations.play('run') : false;
-            }
-            else if (this.tchDirection.right.isDown) {
-                // Aller à droite
-                this.body.velocity.x = 100;
-                Hero.sens = this.scale.x = 1; // Pour tourner le sprite vers la droite
-                this.body.blocked.down ? this.animations.play('run') : false;
+                }
+                else if (this.tchDirection.right.isDown) {
+                    // Aller à droite
+                    this.body.velocity.x = 100;
+                    Hero.sens = this.scale.x = 1; // Pour tourner le sprite vers la droite
+                    this.body.blocked.down ? this.animations.play('run') : false;
+                } else {
+                    // Rester debout (avec respiration)
+                    this.body.blocked.down ? this.animations.play('stand') : false;
+                }
+
+                if (this.game.input.keyboard.downDuration(this.tchSaut) && this.body.blocked.down
+                || this.tchDirection.up.downDuration() && this.body.blocked.down) {
+                    // Sauter
+                    this.isJumping = true;
+                    this.body.velocity.y = -300;
+                    this.animations.play('jump');
+                    this.jumpFx.play();
+                }
+                
             } else {
                 // Rester debout (avec respiration)
                 this.body.blocked.down ? this.animations.play('stand') : false;
             }
-
-            if (this.game.input.keyboard.downDuration(this.tchSaut) && this.body.blocked.down
-            || this.tchDirection.up.downDuration() && this.body.blocked.down) {
-                // Sauter
-                this.body.velocity.y = -300;
-                this.animations.play('jump');
-                this.jumpFx.play();
-            }
-
+                
             if (!this.body.blocked.down && this.body.velocity.y > 0) {
                 // Chuter
                 this.animations.play('fall');
             }
-
+            
+            /******************************* 
+             * Gestion de la sortie de map *
+             *******************************/
             // Actions à effectuer lorsque le player atteint les limites de la map
             this.sortDeLaMap(Hero.nomLvl);
 
-            /****************************************
-	         * Gestion de l'invincibilité du joueur *
-	         ****************************************/
-            // this.setInvincibility();
+            // Enregistrer les dernières coordonnées du joueur sur la terre ferme
+            this.checkTerreFerme();
             
             /**************************************
 	         * Gestion des statistiques du joueur *
@@ -188,7 +215,7 @@ module Begin {
 
         private consequences (level: any, level_limit: any) {
             if (level_limit.dead) {
-                this.meurt();
+                this.tombeDansUnTrou();
             } 
             
             if (level_limit.map) {
@@ -197,20 +224,42 @@ module Begin {
             }
         }
 
+        checkTerreFerme () {
+            if (this.body.blocked.down) {
+                this.xTerreFerme = this.x;
+                this.yTerreFerme = this.body.y; 
+            }
+        }
+
+        tombeDansUnTrou () {
+            this.pause = true;
+            this.setDegats(0.5);
+            
+            let refreshMap = Hero.hp <= 0;
+            let coordonnees = refreshMap ? null : [this.xTerreFerme, this.yTerreFerme];
+
+            this.seTeleporte(Hero.nomLvl, coordonnees, refreshMap);
+        }
+
         meurt () {
             this.seTeleporte(Hero.nomLvl);
             Hero.hp = Hero.hpMax;
         }
 
-        seTeleporte (nomLvl: string, coordonnees: number[] = null) {
-            this.game.state.start(nomLvl);
-            
+        seTeleporte (nomLvl: string = null, coordonnees: number[] = null, refreshMap: boolean = true) {       
             if(coordonnees == null) {   
                 coordonnees = Hero.getOrigineLvl(nomLvl);
             }
             
-            Hero.x = coordonnees[0];
-            Hero.y = coordonnees[1];
+            if (refreshMap) {
+                Hero.y = coordonnees[1];
+                Hero.x = coordonnees[0];
+
+                this.game.state.start(nomLvl);
+            } else {
+                this.x = Math.round(coordonnees[0]);
+                this.y = Math.round(coordonnees[1]);
+            }
         }
 
         setCollisionWithLevelLimits () {
@@ -257,6 +306,7 @@ module Begin {
             
             this.game.time.events.add(3000, () => {
                 this.invincible = false;
+                this.pause = false;
             }, this);
         }
 
@@ -292,6 +342,17 @@ module Begin {
             if (Hero.mp >= Hero.mpMax) {
                 Hero.mp = Hero.mpMax;
             }
+        }
+
+        setDegats(degats: number) {
+            // Jouer le son de la blessure
+            this.hurtFx.play();
+
+            // Diminuer le nombre de points de vie du joueur
+            Hero.hp -= degats;
+
+            // Rendre le joueur invincible
+            this.setInvincibility();
         }
     }
 }

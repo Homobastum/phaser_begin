@@ -39,7 +39,7 @@ module Begin {
 
             // Chargement des sons
             this.load.audio('coin', 'assets/sounds/coin.mp3', true);
-            this.load.audio('trap_hurting', 'assets/sounds/trap_hurting.wav', true);
+            this.load.audio('hurt', 'assets/sounds/hurt.wav', true);
             this.load.audio('jump', 'assets/sounds/jump.mp3', true);
 
             // Chargement des images
@@ -71,7 +71,7 @@ module Begin {
 
         create () {
             // Fast debug (à supprimer lorsque le développement du jeu sera terminé)
-            this.changeState('Map2');
+            this.changeState('Map1');
             
             // Afficher le splash screen "HB Lab"
             this.logo = this.add.sprite(this.world.centerX, this.world.centerY, 'logo');

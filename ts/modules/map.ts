@@ -63,7 +63,7 @@ module Begin {
 
             // Ajuster les collisions de la map
             this.game.world.setBounds(160, 144, 624, 144);
-            this.map.setCollisionBetween(0, 168, true, this.solids);
+            this.map.setCollisionBetween(0, 168, true, this.solids, true);
 
             // Adapter les calques à la map
             this.behind.resizeWorld();
@@ -125,7 +125,7 @@ module Begin {
              * Gestion des collisions *
              **************************/
             // Gestion de la collision entre le joueur et le calque des solides
-            this.game.physics.arcade.collide(this.hero, this.solids);
+            this.game.physics.arcade.collide(this.hero, this.solids, null, null, this);
         }
 
         groupeObjetsExiste (nomGroupe: string) {
@@ -137,6 +137,10 @@ module Begin {
             }
 
             return false;
+        }
+
+        render() {
+            // this.game.debug.body(this.hero);
         }
     }
 }
