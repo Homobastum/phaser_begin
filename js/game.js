@@ -1,5 +1,9 @@
 var Begin;
 (function (Begin) {
+    Begin.env = 'TEST';
+})(Begin || (Begin = {}));
+var Begin;
+(function (Begin) {
     class Jeu extends Phaser.Game {
         constructor() {
             super(160, 144, Phaser.AUTO, '', null, false, false);
@@ -185,8 +189,10 @@ var Begin;
             this.game.add.existing(this);
         }
         update() {
-            Hero.xPos = Math.round(this.body.x);
-            Hero.yPos = Math.round(this.body.y);
+            if (Begin.env == 'DEV') {
+                Hero.xPos = Math.round(this.body.x);
+                Hero.yPos = Math.round(this.body.y);
+            }
             this.hud.setHpBar();
             this.hud.setMpBar();
             this.body.velocity.x = 0;
@@ -378,12 +384,16 @@ var Begin;
             this.hudMpWidth = this.hudMp.width;
             this.hudBg = this.game.add.sprite(0, 0, 'hud_bg', null, this);
             this.scoreText = this.game.add.bitmapText(77, 2, 'retrofont', 'x ' + Begin.Coins.nb, 12, this);
-            this.playerX = this.game.add.bitmapText(110, 2, 'retrofont', 'X: ' + Math.round(Begin.Hero.xPos), 12, this);
-            this.playerY = this.game.add.bitmapText(110, 14, 'retrofont', 'Y: ' + Begin.Hero.yPos, 12, this);
+            if (Begin.env == 'DEV') {
+                this.playerX = this.game.add.bitmapText(110, 2, 'retrofont', 'X: ' + Math.round(Begin.Hero.xPos), 12, this);
+                this.playerY = this.game.add.bitmapText(110, 14, 'retrofont', 'Y: ' + Begin.Hero.yPos, 12, this);
+            }
         }
         update() {
-            this.playerX.setText('X: ' + Begin.Hero.xPos);
-            this.playerY.setText('Y: ' + Begin.Hero.yPos);
+            if (Begin.env == 'DEV') {
+                this.playerX.setText('X: ' + Begin.Hero.xPos);
+                this.playerY.setText('Y: ' + Begin.Hero.yPos);
+            }
         }
         setNbPieces() {
             this.scoreText.setText('x ' + Begin.Coins.nb);
@@ -457,7 +467,6 @@ var Begin;
             return false;
         }
         render() {
-            this.game.debug.body(this.hero);
         }
     }
     Begin.Map = Map;

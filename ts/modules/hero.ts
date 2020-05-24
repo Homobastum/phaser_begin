@@ -110,11 +110,14 @@ module Begin {
         }
 
         update () {
-            /********************
-	         * Gestion du debug *
-	         ********************/
-            Hero.xPos = Math.round(this.body.x);
-            Hero.yPos = Math.round(this.body.y);
+            if (env == 'DEV') {
+                /*********
+                 * Debug *
+                 *********/
+                // Debug: calculer les coordonnées du joueur en tant réel
+                Hero.xPos = Math.round(this.body.x);
+                Hero.yPos = Math.round(this.body.y);
+            }
             
             /******************
 	         * Gestion du HUD *

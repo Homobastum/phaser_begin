@@ -27,13 +27,25 @@ module Begin {
             
             this.scoreText = this.game.add.bitmapText(77, 2, 'retrofont', 'x ' + Coins.nb, 12, this);
 
-            this.playerX = this.game.add.bitmapText(110, 2, 'retrofont', 'X: ' + Math.round(Hero.xPos), 12, this);
-            this.playerY = this.game.add.bitmapText(110, 14, 'retrofont', 'Y: ' + Hero.yPos, 12, this);
+            if (env == 'DEV') {
+                /*********
+                 * Debug *
+                 *********/
+                // Debug: préparer l'affichage des coordonnées du joueur en tant réel
+                this.playerX = this.game.add.bitmapText(110, 2, 'retrofont', 'X: ' + Math.round(Hero.xPos), 12, this);
+                this.playerY = this.game.add.bitmapText(110, 14, 'retrofont', 'Y: ' + Hero.yPos, 12, this);
+            }
         }
 
         update () {
-            this.playerX.setText('X: ' + Hero.xPos);
-            this.playerY.setText('Y: ' + Hero.yPos);
+            if (env == 'DEV') {
+                /*********
+                 * Debug *
+                 *********/
+                // Debug: afficher les coordonnées du joueur en tant réel
+                this.playerX.setText('X: ' + Hero.xPos);
+                this.playerY.setText('Y: ' + Hero.yPos);
+            }
         }
 
         setNbPieces () {

@@ -1,0 +1,21 @@
+{
+    "app_name": "Phaser Begin",
+    "main": "index.html",
+    "name": "phaser_begin",
+    "nodejs": true,
+    "webexe_settings": {
+        "download_dir": "",
+        "force_download": false,
+        "nw_compression_level": 0,
+        "nw_version": "0.44.1",
+        "sdk_build": false,
+        "uncompressed_folder": false,
+        "windows-x32": true,
+        "windows-x64": true
+    },
+    "webkit": {},
+    "window": {
+        "id": "phaser_begin",
+        "title": "Phaser Begin"
+    }
+}

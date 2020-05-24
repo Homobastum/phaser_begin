@@ -1,0 +1,17 @@
+{
+    "webexe_settings": {
+        "blacklist": "",
+        "custom_script": "",
+        "download_dir": "",
+        "export_dir": "C:\\Users\\gonth\\OneDrive\\Documents\\Homo bastum Lab\\Projets\\Jeux\\Phaser\\phaser_begin\\releases",
+        "force_download": false,
+        "nw_compression_level": 0,
+        "nw_version": "0.46.0",
+        "output_pattern": "",
+        "sdk_build": true,
+        "uncompressed_folder": false,
+        "whitelist": "",
+        "windows-x32": true,
+        "windows-x64": true
+    }
+}
